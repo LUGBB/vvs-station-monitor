@@ -29,4 +29,10 @@ or from the formular at vvs.de:
 
 ![VVS station id](documentation/get-station-id.png "VVS station id")
 
+## Why `vvs.php`?
 
+Because efa-api.asw.io doesn't allows CORS requests we need a local proxy
+which proxies the requests to efa-api.asw.io and pass them to the local
+web page.
+It's not possible to access https://efa-api.asw.io/ directly via 
+JavaScript (AJAX) so we currently need a local proxy.
