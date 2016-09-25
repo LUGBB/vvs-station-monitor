@@ -40,7 +40,24 @@
   color: white;
   background-color: #707273;
 }
-.vvs-station td.direction {
+.vvs-station .overall-box {
+  position: relative;
+}
+.vvs-station .time-box {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  background-color: white;
+  padding-left: 0.5rem;
+}
+.vvs-station tr.danger .time-box {
+  background-color: #f2dede;
+}
+.vvs-station tr.warning .time-box {
+  background-color: #fcf8e3;
+}
+.vvs-station tr td {
   white-space: nowrap;
 }
 .vvs-station div.direction {
@@ -49,30 +66,25 @@
 .vvs-station div.direction::before {
   content: " ⇨ ";
 }
-.vvs-station td.departure {
-  text-align: right;
-  white-space: nowrap;
-}
 .vvs-station div.departure {
   display: inline-block;
 }
 .vvs-station div.departure::after {
   content: " min ";
 }
-.vvs-station td.delay {
-  text-align: right;
-}
 .vvs-station div.delay {
   display: none;
+  font-size: 1.8rem;
+  vertical-align: text-bottom;
 }
 .vvs-station div.delay:not([data-delay='']) {
   display: inline-block;
 }
 .vvs-station div.delay[data-delay="+"]::before {
-  content: "+ ";
+  content: "+";
 }
 .vvs-station div.delay[data-delay="-"]::before {
-  content: "- ";
+  content: "-";
 }
 .spinner-content {
   position: absolute;

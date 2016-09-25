@@ -203,19 +203,19 @@
 
                             var template = `
                             <tr class="${rowClass}">
-                                <td class="line"></td>
-                                <td class="direction">
-                                    <div class="line-symbol" data-line="${line.numberType}" data-line="${line.number}">${line.number}</div>
-                                    <div class="direction">${line.direction}</div>
+                                <td>
+                                    <div class="overall-box">
+                                        <div class="departure-box">
+                                            <div class="line-symbol" data-line="${line.numberType}" data-line="${line.number}">${line.number}</div>
+                                            <div class="direction">${line.direction}</div>
+                                        </div>
+                                        <div class="time-box">
+                                            <div class="badge delay" data-delay="${line.delayType}">${line.delayAbs}</div>
+                                            <div class="departure">${line.departure}</div>
+                                        </div>
+                                    </div>
                                 </td>
-                                <td class="departure">
-                                    <div class="departure">${line.departure}</div>
-                                </td>
-                                <td class="delay">
-                                    <div class="badge delay" data-delay="${line.delayType}">${line.delayAbs}</div>
-                                </td>
-                            </tr>
-                        `;
+                            </tr>`;
                             tableEl.append(template);
                         });
                     } else {
