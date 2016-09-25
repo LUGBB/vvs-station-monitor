@@ -1,0 +1,124 @@
+.vvs-station {
+  position: relative;
+  padding: 0;
+  margin-top: 3rem;
+}
+.vvs-station h3 {
+  font-size: 2.5rem;
+}
+.vvs-station p {
+  padding: 15px;
+}
+.vvs-station ul {
+  display: table;
+}
+.vvs-station li {
+  display: table-row;
+}
+.vvs-station li > div {
+  display: table-cell;
+}
+.vvs-station .line-symbol {
+  min-width: 2em;
+  display: inline-block;
+  text-align: center;
+}
+.vvs-station .line-symbol[data-line^=U] {
+  color: white;
+  background-color: #2789c4;
+}
+.vvs-station .line-symbol[data-line^=S] {
+  color: white;
+  background-color: #288d20;
+}
+.vvs-station .line-symbol[data-line^=B],
+.vvs-station .line-symbol[data-line^=N] {
+  color: white;
+  background-color: #da0003;
+}
+.vvs-station .line-symbol[data-line^=R] {
+  color: white;
+  background-color: #707273;
+}
+.vvs-station td.direction {
+  white-space: nowrap;
+}
+.vvs-station div.direction {
+  display: inline-block;
+}
+.vvs-station div.direction::before {
+  content: " ⇨ ";
+}
+.vvs-station td.departure {
+  text-align: right;
+  white-space: nowrap;
+}
+.vvs-station div.departure {
+  display: inline-block;
+}
+.vvs-station div.departure::after {
+  content: " min ";
+}
+.vvs-station td.delay {
+  text-align: right;
+}
+.vvs-station div.delay {
+  display: none;
+}
+.vvs-station div.delay:not([data-delay='']) {
+  display: inline-block;
+}
+.vvs-station div.delay[data-delay="+"]::before {
+  content: "+ ";
+}
+.vvs-station div.delay[data-delay="-"]::before {
+  content: "- ";
+}
+.spinner-content {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  text-align: center;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+.spinner .double-bounce1,
+.spinner .double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-animation: sk-bounce 2s infinite ease-in-out;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+.spinner .double-bounce2 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+@-webkit-keyframes sk-bounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
+}
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+    -webkit-transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+  }
+}

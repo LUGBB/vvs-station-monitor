@@ -1,0 +1,154 @@
+.vvs-station {
+    position: relative;
+    padding: 0;
+    margin-top: 3rem;
+
+    h3 {
+        font-size: 2.5rem;
+    }
+
+    p {
+        padding: 15px;
+    }
+
+    ul {
+        display: table;
+    }
+
+    li {
+
+        display: table-row;
+
+        & > div {
+            display: table-cell;
+        }
+    }
+
+    .line-symbol {
+
+        min-width: 2em;
+        display: inline-block;
+        text-align: center;
+
+        &[data-line^=U] {
+            color: white;
+            background-color: #2789c4;
+        }
+
+        &[data-line^=S] {
+            color: white;
+            background-color: #288d20;
+        }
+
+        &[data-line^=B],
+        &[data-line^=N] {
+            color: white;
+            background-color: #da0003;
+        }
+
+        &[data-line^=R] {
+            color: white;
+            background-color: #707273;
+        }
+    }
+
+    td.direction {
+        white-space: nowrap;
+    }
+
+    div.direction {
+
+        display: inline-block;
+
+        &::before {
+            content: " ⇨ ";
+        }
+    }
+
+    td.departure {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    div.departure {
+
+        display: inline-block;
+
+        &::before {
+            // content: " in ";
+        }
+
+        &::after {
+            content: " min ";
+        }
+    }
+
+    td.delay {
+        text-align: right;
+    }
+
+    div.delay {
+
+        display: none;
+
+        &:not([data-delay='']) {
+            display: inline-block;
+        }
+
+        &[data-delay="+"]::before {
+            content: "+ ";
+        }
+
+        &[data-delay="-"]::before {
+            content: "- ";
+        }
+    }
+}
+
+.spinner-content {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    text-align: center;
+}
+
+.spinner  {
+    width: 40px;
+    height: 40px;
+
+    position: relative;
+
+    .double-bounce1, .double-bounce2 {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: #333;
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+        animation: sk-bounce 2.0s infinite ease-in-out;
+    }
+
+    .double-bounce2 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s;
+    }
+
+    @-webkit-keyframes sk-bounce {
+        0%, 100% { -webkit-transform: scale(0.0) }
+        50% { -webkit-transform: scale(1.0) }
+    }
+
+    @keyframes sk-bounce {
+        0%, 100% {
+            transform: scale(0.0);
+            -webkit-transform: scale(0.0);
+        } 50% {
+              transform: scale(1.0);
+              -webkit-transform: scale(1.0);
+          }
+    }
+}
