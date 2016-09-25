@@ -2,10 +2,16 @@
 
 ![VVS station monitor](documentation/preview.png "VVS station montitor")
 
-
-## VVS?
+## What's VVS?
 
 VVS (VVS Verkehrs- und Tarifverbund Stuttgart) is the public transport group in stuttgart.
+
+## What does the station monitor do?
+
+The station monitor will show next departures from one or more stations
+and will display also the delay.
+The station monitor will refresh periodically and can be used for
+infomation monitors.
 
 ## Configuration
 
@@ -18,7 +24,9 @@ directions and lines (eg. no busses).
 
 ### Get station id
 
-You can get the station id from the formular at vvs.de:
+You can get the station id from https://efa-api.asw.io/api/v1/station/ 
+or from the formular at vvs.de:
 
 ![VVS station id](documentation/get-station-id.png "VVS station id")
+
 
