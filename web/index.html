@@ -40,6 +40,11 @@
                     noData: 'Keine Haltestellen Infos'
                 }
             });
+
+            // reload every 60 minutes
+            setTimeout(function() {
+                location.reload();
+            }, 60 * 60 * 1000);
         });
     </script>
 </body>
