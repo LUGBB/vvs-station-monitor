@@ -210,7 +210,7 @@
                                             <div class="direction">${line.direction}</div>
                                         </div>
                                         <div class="time-box">
-                                            <div class="badge delay" data-delay="${line.delayType}">${line.delayAbs}</div>
+                                            <div class="label label-danger delay" data-delay="${line.delayType}">${line.delayAbs}</div>
                                             <div class="departure">${line.departure}</div>
                                         </div>
                                     </div>
