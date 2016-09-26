@@ -1,0 +1,58 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>VVS Haltestellen-Monitor</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="res/main.css">
+    <style type="text/css">
+        body {
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006002" data-filter-line="^((?![0-9][0-9]).)*$" data-min-departure="10" data-max-departure="200"></div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5002582"></div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5002599" data-filter-direction="^((?!Dürrlewang).)*$" data-filter-line="^((?!80).)*$"></div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5000355" data-filter-direction="^((?!Dürrlewang|Vaihingen).)*$" data-min-departure="5"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="res/vvs.js"></script>
+<script>
+    jQuery( document ).ready(function($) {
+        $(".vvs-station").vvsStation({
+            loadingIndicator: '<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>',
+            translation: {
+                noData: 'Keine Haltestellen Infos'
+            }
+        });
+
+        // reload every 60 minutes
+        setTimeout(function() {
+            location.reload();
+        }, 60 * 60 * 1000);
+    });
+</script>
+</body>
+</html>
