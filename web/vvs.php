@@ -1,5 +1,9 @@
 <?php
 
+header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+
 
 $url = null;
 if (!empty($_REQUEST['type'])) {
@@ -19,9 +23,6 @@ if (!empty($url)) {
     ];
 
     $context = stream_context_create($contextOptions);
-
-
-    header('Content-Type: application/json');
     $content = file_get_contents($url, false, $context);
 
     if (!empty($content)) {
