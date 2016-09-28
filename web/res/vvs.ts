@@ -151,10 +151,7 @@
 
             // default settings
             var settings = $.extend({
-                // These are the defaults.
-                color: "#556b2f",
-                backgroundColor: "white",
-                updateTime:  90 * 1000,
+                updateTime:  60 * 1000,
                 updateTimeRandom: 5 * 1000,
                 firstUpdateTimeRandom: 2.5 * 1000,
                 station: false,
