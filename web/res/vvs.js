@@ -20,7 +20,10 @@
                 maxEntries: 20,
                 minDeparture: 3,
                 maxDeparture: 120,
-                filterDirection: false
+                blacklistDirection: false,
+                whitelistDirection: false,
+                blacklistLine: false,
+                whitelistLine: false
             }, options);
             var request = this.request({
                 type: "departures",
@@ -44,16 +47,28 @@
                     ret = ret.filter(function (value) {
                         return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture);
                     });
-                    // filter by direction
-                    if (settings.filterDirection) {
+                    // whitelist by direction
+                    if (settings.whitelistDirection) {
                         ret = ret.filter(function (value) {
-                            return value.direction.match(settings.filterDirection);
+                            return value.direction.match(settings.whitelistDirection);
                         });
                     }
-                    // filter by line
-                    if (settings.filterLine) {
+                    // blacklist by direction
+                    if (settings.blacklistDirection) {
                         ret = ret.filter(function (value) {
-                            return value.number.match(settings.filterLine);
+                            return !(value.direction.match(settings.blacklistDirection));
+                        });
+                    }
+                    // whitelist by line
+                    if (settings.blacklistLine) {
+                        ret = ret.filter(function (value) {
+                            return !(value.number.match(settings.blacklistLine));
+                        });
+                    }
+                    // blacklist by line
+                    if (settings.whitelistLine) {
+                        ret = ret.filter(function (value) {
+                            return value.number.match(settings.whitelistLine);
                         });
                     }
                     // filter by max entires
@@ -120,17 +135,23 @@
                 minDeparture: 3,
                 maxDeparture: 120,
                 loadingIndicator: '',
-                filterDirection: false,
-                filterLine: false,
+                blacklistDirection: false,
+                whitelistDirection: false,
+                blacklistLine: false,
+                whitelistLine: false,
                 requestUrl: 'vvs.php',
                 translation: {
                     noData: 'No station info available'
                 }
             }, $this.data(), options);
-            if (settings.filterDirection)
-                settings.filterDirection = new RegExp(settings.filterDirection);
-            if (settings.filterLine)
-                settings.filterLine = new RegExp(settings.filterLine);
+            if (settings.blacklistDirection)
+                settings.blacklistDirection = new RegExp(settings.blacklistDirection);
+            if (settings.whitelistDirection)
+                settings.whitelistDirection = new RegExp(settings.whitelistDirection);
+            if (settings.blacklistLine)
+                settings.blacklistLine = new RegExp(settings.blacklistLine);
+            if (settings.whitelistLine)
+                settings.whitelistLine = new RegExp(settings.whitelistLine);
             if (!settings.station) {
                 console.log('VVS station not set');
                 return;
