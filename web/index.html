@@ -18,34 +18,34 @@
 </head>
 <body>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="vvs-station" data-station="5006118" data-blacklist-line="^[0-9]+$" data-min-departure="15" data-max-departure="200"></div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="vvs-station" data-station="5006056" data-min-departure="5" data-max-departure="200"></div>
-            </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006118" data-blacklist-line="^[0-9]+$" data-min-departure="15" data-max-departure="200"></div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006056" data-min-departure="5" data-max-departure="200"></div>
         </div>
     </div>
+</div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="res/vvs.js"></script>
-    <script>
-        jQuery( document ).ready(function($) {
-            $(".vvs-station").vvsStation({
-                loadingIndicator: '<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>',
-                translation: {
-                    noData: 'Keine Haltestellen Infos'
-                }
-            });
-
-            // reload every 60 minutes
-            setTimeout(function() {
-                location.reload();
-            }, 60 * 60 * 1000);
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="res/vvs.js"></script>
+<script>
+    jQuery( document ).ready(function($) {
+        $(".vvs-station").vvsStation({
+            loadingIndicator: '<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>',
+            translation: {
+                noData: 'Keine Haltestellen Infos'
+            }
         });
-    </script>
+
+        // reload every 60 minutes
+        setTimeout(function() {
+            location.reload();
+        }, 60 * 60 * 1000);
+    });
+</script>
 </body>
 </html>
