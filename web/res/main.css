@@ -22,6 +22,7 @@
   min-width: 2em;
   display: inline-block;
   text-align: center;
+  border: 1px solid transparent;
 }
 .vvs-station .line-symbol[data-line^=U] {
   color: white;
@@ -32,13 +33,20 @@
   background-color: #288d20;
 }
 .vvs-station .line-symbol[data-line^=B],
-.vvs-station .line-symbol[data-line^=N] {
+.vvs-station .line-symbol[data-line^=N],
+.vvs-station .line-symbol[data-line^=X] {
   color: white;
   background-color: #da0003;
 }
 .vvs-station .line-symbol[data-line^=R] {
   color: white;
   background-color: #707273;
+}
+.vvs-station .line-symbol[data-line^=IC],
+.vvs-station .line-symbol[data-line^=IR] {
+  color: red;
+  background-color: white;
+  border-color: black;
 }
 .vvs-station .overall-box {
   position: relative;

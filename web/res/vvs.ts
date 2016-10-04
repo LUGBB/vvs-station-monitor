@@ -129,9 +129,13 @@
         transformLineNumberToType(lineNumber) {
             var ret = "";
 
+            var match = lineNumber.match(/^([a-z]+)/i)
+
             // check if Bus
             if (!isNaN(Number(lineNumber))) {
                 ret = "B";
+            } else if (match) {
+                ret = lineNumber[0];
             } else {
                 ret = lineNumber.charAt(0);
             }

@@ -1,3 +1,4 @@
+
 .vvs-station {
     position: relative;
     padding: 0;
@@ -28,26 +29,42 @@
         display: inline-block;
         text-align: center;
 
+        border: 1px solid transparent;
+
+        // U-Bahn
         &[data-line^=U] {
             color: white;
             background-color: #2789c4;
         }
 
+        // S-Bahn
         &[data-line^=S] {
             color: white;
             background-color: #288d20;
         }
 
+        // Bus
         &[data-line^=B],
-        &[data-line^=N] {
+        &[data-line^=N],
+        &[data-line^=X] {
             color: white;
             background-color: #da0003;
         }
 
+        // Regionalbahn (R,RB,RE,RT)
         &[data-line^=R] {
             color: white;
             background-color: #707273;
         }
+
+        // IC, ICE, IRE
+        &[data-line^=IC],
+        &[data-line^=IR] {
+            color: red;
+            background-color: white;
+            border-color: black;
+        }
+
     }
 
     .overall-box {
