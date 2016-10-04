@@ -1,3 +1,8 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 (function () {
     'use strict';
     var VVS = (function () {
@@ -8,6 +13,21 @@
                 url: this.requestUrl,
                 dataType: "json",
                 data: data
+            });
+        };
+        VVS.prototype.requestStationDepartures = function (station) {
+            var request = this.request({
+                type: "departures",
+                station: station
+            });
+            return new Promise(function (resolve, reject) {
+                request.done(function (data) {
+                    resolve(data);
+                });
+                // ajax error
+                request.error(function (jqXHR, textStatus, errorThrown) {
+                    reject(textStatus + ": " + errorThrown);
+                });
             });
         };
         VVS.prototype.setRequestUrl = function (url) {
@@ -25,12 +45,9 @@
                 blacklistLine: false,
                 whitelistLine: false
             }, options);
-            var request = this.request({
-                type: "departures",
-                station: station
-            });
-            var promise = new Promise(function (resolve, reject) {
-                request.done(function (data) {
+            var request = this.requestStationDepartures(station);
+            return new Promise(function (resolve, reject) {
+                request.then(function (data) {
                     var currentdate = new Date();
                     var ret = [];
                     $.each(data, function (index, line) {
@@ -76,13 +93,11 @@
                         ret.splice(settings.maxEntries);
                     }
                     resolve(ret);
-                });
-                // ajax error
-                request.error(function (jqXHR, textStatus, errorThrown) {
-                    reject(textStatus + ": " + errorThrown);
+                }, function (reason) {
+                    // rejection
+                    reject(reason);
                 });
             });
-            return promise;
         };
         VVS.prototype.calculateDepatureTime = function (departure, currentdate) {
             var ret = 0;
@@ -118,15 +133,58 @@
         };
         return VVS;
     }());
+    var CachedVVS = (function (_super) {
+        __extends(CachedVVS, _super);
+        function CachedVVS() {
+            _super.apply(this, arguments);
+            this.cacheTime = 59;
+        }
+        CachedVVS.prototype.requestStationDepartures = function (station) {
+            if (!localStorage) {
+                return _super.prototype.requestStationDepartures.call(this, station);
+            }
+            var keyTimestamp = '' + station + '.timestamp';
+            var keyData = '' + station + '.data';
+            var currentTime = Math.floor(Date.now() / 1000);
+            var lastUptimeTime = localStorage.getItem(keyTimestamp);
+            var ret = localStorage.getItem(keyData);
+            if (lastUptimeTime) {
+                lastUptimeTime = JSON.parse(lastUptimeTime);
+            }
+            else {
+                lastUptimeTime = false;
+            }
+            if (ret) {
+                ret = JSON.parse(ret);
+            }
+            else {
+                ret = false;
+            }
+            if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60)) {
+                return new Promise(function (resolve, reject) {
+                    resolve(ret);
+                });
+            }
+            else {
+                ret = _super.prototype.requestStationDepartures.call(this, station);
+                ret.then(function (data) {
+                    localStorage.setItem(keyData, JSON.stringify(data));
+                    localStorage.setItem(keyTimestamp, JSON.stringify(currentTime));
+                });
+            }
+            return ret;
+        };
+        return CachedVVS;
+    }(VVS));
     $.fn.vvsStation = function (options) {
         this.each(function (index, el) {
             var $this = $(el);
-            var vvs = new VVS();
+            var vvs = new CachedVVS();
             // default settings
             var settings = $.extend({
                 updateTime: 60 * 1000,
                 updateTimeRandom: 5 * 1000,
-                firstUpdateTimeRandom: 2.5 * 1000,
+                firstUpdateTimeRandom: 0,
                 station: false,
                 maxEntries: 20,
                 minDeparture: 3,
@@ -196,7 +254,7 @@
                 });
             };
             var intervalTime = settings.updateTime + (Math.random() * settings.updateTimeRandom);
-            var firstReqTime = 250 + (Math.random() * settings.firstUpdateTimeRandom);
+            var firstReqTime = 1 + (Math.random() * settings.firstUpdateTimeRandom);
             addLoadingIndicator();
             setInterval(updateSchedule, intervalTime);
             setTimeout(updateSchedule, firstReqTime);

@@ -12,6 +12,24 @@
             });
         }
 
+        requestStationDepartures(station) {
+            var request = this.request({
+                type: "departures",
+                station: station
+            });
+
+            return new Promise((resolve, reject) => {
+                request.done(data => {
+                    resolve(data);
+                });
+
+                // ajax error
+                request.error((jqXHR, textStatus, errorThrown) => {
+                    reject(`${textStatus}: ${errorThrown}`);
+                });
+            });
+        }
+
         setRequestUrl(url) {
             this.requestUrl = url;
         }
@@ -29,13 +47,11 @@
                 whitelistLine: false,
             }, options);
 
-            var request = this.request({
-                type: "departures",
-                station: station
-            });
+            var request = this.requestStationDepartures(station);
 
-            const promise = new Promise((resolve, reject) => {
-                request.done(data => {
+
+            return new Promise((resolve, reject) => {
+                request.then(data => {
                     var currentdate = new Date();
 
                     var ret = [];
@@ -91,15 +107,11 @@
                     }
 
                     resolve(ret);
-                });
-
-                // ajax error
-                request.error((jqXHR, textStatus, errorThrown) => {
-                    reject(`${textStatus}: ${errorThrown}`);
+                }, function(reason) {
+                    // rejection
+                    reject(reason);
                 });
             });
-
-            return promise;
         }
 
         calculateDepatureTime(departure, currentdate) {
@@ -143,17 +155,62 @@
         }
     }
 
+    class CachedVVS extends VVS {
+        cacheTime = 59;
+
+        requestStationDepartures(station) {
+            if (!localStorage) {
+                return super.requestStationDepartures(station);
+            }
+
+            var keyTimestamp = '' + station + '.timestamp';
+            var keyData      = '' + station + '.data';
+
+            var currentTime  = Math.floor(Date.now() / 1000);
+
+
+            var lastUptimeTime = localStorage.getItem(keyTimestamp);
+            var ret            = localStorage.getItem(keyData);
+
+            if (lastUptimeTime) {
+                lastUptimeTime = JSON.parse(lastUptimeTime);
+            } else {
+                lastUptimeTime = false;
+            }
+
+            if (ret) {
+                ret = JSON.parse(ret);
+            } else {
+                ret = false;
+            }
+
+            if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60) ) {
+                return new Promise((resolve, reject) => {
+                    resolve(ret);
+                });
+            } else {
+                ret = super.requestStationDepartures(station);
+                ret.then((data) => {
+                    localStorage.setItem(keyData, JSON.stringify(data));
+                    localStorage.setItem(keyTimestamp, JSON.stringify(currentTime));
+                });
+            }
+
+            return ret;
+        }
+    }
+
 
     $.fn.vvsStation = function(options) {
         this.each(function(index, el) {
             var $this = $(el);
-            var vvs = new VVS();
+            var vvs = new CachedVVS();
 
             // default settings
             var settings = $.extend({
                 updateTime:  60 * 1000,
                 updateTimeRandom: 5 * 1000,
-                firstUpdateTimeRandom: 2.5 * 1000,
+                firstUpdateTimeRandom: 0,
                 station: false,
                 maxEntries: 20,
                 minDeparture: 3,
@@ -247,7 +304,7 @@
             };
 
             var intervalTime = settings.updateTime + ( Math.random() * settings.updateTimeRandom );
-            var firstReqTime = 250 + ( Math.random() * settings.firstUpdateTimeRandom );
+            var firstReqTime = 1 + ( Math.random() * settings.firstUpdateTimeRandom );
 
             addLoadingIndicator();
             setInterval(updateSchedule, intervalTime);
