@@ -101,11 +101,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         VVS.prototype.calculateDepatureTime = function (departure, currentdate) {
             var ret = 0;
-            ret = (parseInt(departure.year) * 365 * 24 * 60) - (parseInt(currentdate.getFullYear()) * 365 * 24 * 60); //Get the year
-            ret = ret + (parseInt(departure.month) * 12 * 24 * 60) - ((parseInt(currentdate.getMonth()) + 1) * 12 * 24 * 60); //Get the month
-            ret = ret + (parseInt(departure.day) * 24 * 60) - (parseInt(currentdate.getDate()) * 24 * 60); //Get the day
-            ret = ret + ((parseInt(departure.hour)) * 60) - (parseInt(currentdate.getHours()) * 60); //Get the hour
-            ret = ret + parseInt(departure.minute) - parseInt(currentdate.getMinutes()); //Get the minute
+            ret += (parseInt(departure.year) * 365 * 24 * 60) - (parseInt(currentdate.getFullYear()) * 365 * 24 * 60); //Get the year
+            ret += (parseInt(departure.month) * 12 * 24 * 60) - ((parseInt(currentdate.getMonth()) + 1) * 12 * 24 * 60); //Get the month
+            ret += (parseInt(departure.day) * 24 * 60) - (parseInt(currentdate.getDate()) * 24 * 60); //Get the day
+            ret += ((parseInt(departure.hour)) * 60) - (parseInt(currentdate.getHours()) * 60); //Get the hour
+            ret += parseInt(departure.minute) - parseInt(currentdate.getMinutes()); //Get the minute
             return ret;
         };
         VVS.prototype.transformLineNumberToType = function (lineNumber) {
