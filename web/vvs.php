@@ -18,7 +18,8 @@ if (!empty($_REQUEST['type'])) {
 if (!empty($url)) {
     $contextOptions = [
         'http' => [
-            'header'=> "Content-type: application/json"
+            'header'=> 'Content-type: application/json',
+            'timeout' => 15
         ]
     ];
 
