@@ -34,7 +34,8 @@
 }
 .vvs-station .line-symbol[data-line^=B],
 .vvs-station .line-symbol[data-line^=N],
-.vvs-station .line-symbol[data-line^=X] {
+.vvs-station .line-symbol[data-line^=X],
+.vvs-station .line-symbol[data-line^=E] {
   color: white;
   background-color: #da0003;
 }
