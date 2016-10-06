@@ -54,57 +54,63 @@
                 request.then(data => {
                     var currentdate = new Date();
 
-                    var ret = [];
-                    $.each(data, (index,line) => {
-                        var departureTime = line.departureTime;
-                        //delete line.departureTime;
+                    var stops = [];
+                    var ret = this.prepareStationData(station, data);
 
-                        line.departure = this.calculateDepatureTime(departureTime, currentdate);
-                        line.numberType = this.transformLineNumberToType(line.number);
-                        line.delayType = this.transformDelayToType(line.delay);
-                        line.delaySign = Math.sign(line.delay);
-                        line.delayAbs  = Math.abs(line.delay);
+                    if (data.length) {
+                        $.each(data, (index,line) => {
+                            var departureTime = line.departureTime;
+                            //delete line.departureTime;
 
-                        ret.push(line);
-                    });
+                            line.departure = this.calculateDepatureTime(departureTime, currentdate);
+                            line.numberType = this.transformLineNumberToType(line.number);
+                            line.delayType = this.transformDelayToType(line.delay);
+                            line.delaySign = Math.sign(line.delay);
+                            line.delayAbs  = Math.abs(line.delay);
 
-                    // filter by departure time
-                    ret = ret.filter((value) => {
-                        return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture)
-                    });
-
-                    // whitelist by direction
-                    if (settings.whitelistDirection) {
-                        ret = ret.filter((value) => {
-                            return value.direction.match(settings.whitelistDirection);
+                            stops.push(line);
                         });
-                    }
 
-                    // blacklist by direction
-                    if (settings.blacklistDirection) {
-                        ret = ret.filter((value) => {
-                            return !(value.direction.match(settings.blacklistDirection));
+                        // filter by departure time
+                        stops = stops.filter((value) => {
+                            return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture)
                         });
+
+                        // whitelist by direction
+                        if (settings.whitelistDirection) {
+                            stops = stops.filter((value) => {
+                                return value.direction.match(settings.whitelistDirection);
+                            });
+                        }
+
+                        // blacklist by direction
+                        if (settings.blacklistDirection) {
+                            stops = stops.filter((value) => {
+                                return !(value.direction.match(settings.blacklistDirection));
+                            });
+                        }
+
+                        // whitelist by line
+                        if (settings.blacklistLine) {
+                            stops = stops.filter((value) => {
+                                return !(value.number.match(settings.blacklistLine));
+                            });
+                        }
+
+                        // blacklist by line
+                        if (settings.whitelistLine) {
+                            stops = stops.filter((value) => {
+                                return value.number.match(settings.whitelistLine);
+                            });
+                        }
+
+                        // filter by max entires
+                        if (settings.maxEntries) {
+                            stops.splice(settings.maxEntries);
+                        }
                     }
 
-                    // whitelist by line
-                    if (settings.blacklistLine) {
-                        ret = ret.filter((value) => {
-                            return !(value.number.match(settings.blacklistLine));
-                        });
-                    }
-
-                    // blacklist by line
-                    if (settings.whitelistLine) {
-                        ret = ret.filter((value) => {
-                            return value.number.match(settings.whitelistLine);
-                        });
-                    }
-
-                    // filter by max entires
-                    if (settings.maxEntries) {
-                        ret.splice(settings.maxEntries);
-                    }
+                    ret.stops = stops;
 
                     resolve(ret);
                 }, function(reason) {
@@ -157,10 +163,37 @@
 
             return ret;
         }
+
+        prepareStationData(station, data) {
+            var ret = {
+                stationName: false
+            };
+
+            if (data.length) {
+                var firstStop = data.pop()
+                ret.stationName = firstStop.stopName;
+            }
+
+            return ret;
+        }
     }
 
     class CachedVVS extends VVS {
         cacheTime = 59;
+
+        cacheGetData(key) {
+            var data = localStorage.getItem(key);
+
+            if (data) {
+                return JSON.parse(data);
+            } else {
+                return false;
+            }
+        }
+
+        cacheSetData(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
 
         requestStationDepartures(station) {
             if (!localStorage) {
@@ -172,21 +205,8 @@
 
             var currentTime  = Math.floor(Date.now() / 1000);
 
-
-            var lastUptimeTime = localStorage.getItem(keyTimestamp);
-            var ret            = localStorage.getItem(keyData);
-
-            if (lastUptimeTime) {
-                lastUptimeTime = JSON.parse(lastUptimeTime);
-            } else {
-                lastUptimeTime = false;
-            }
-
-            if (ret) {
-                ret = JSON.parse(ret);
-            } else {
-                ret = false;
-            }
+            var lastUptimeTime = this.cacheGetData(keyTimestamp);
+            var ret            = this.cacheGetData(keyData);
 
             if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60) ) {
                 return new Promise((resolve, reject) => {
@@ -195,9 +215,23 @@
             } else {
                 ret = super.requestStationDepartures(station);
                 ret.then((data) => {
-                    localStorage.setItem(keyData, JSON.stringify(data));
-                    localStorage.setItem(keyTimestamp, JSON.stringify(currentTime));
+                    this.cacheSetData(keyData, data);
+                    this.cacheSetData(keyTimestamp, currentTime);
                 });
+            }
+
+            return ret;
+        }
+
+        prepareStationData(station, data) {
+            var ret = super.prepareStationData(station, data);
+
+            var cacheKey = '' + station + '.title';
+
+            if (ret.stationName) {
+                this.cacheSetData(cacheKey, ret.stationName);
+            } else {
+                ret.stationName = this.cacheGetData(cacheKey);
             }
 
             return ret;
@@ -259,10 +293,10 @@
 
                     var tableEl = false;
 
-                    if(data.length) {
-                        $.each(data, (index, line) => {
+                    if(data && data.stops && data.stops.length) {
+                        $.each(data.stops, (index, line) => {
                             if (index === 0) {
-                                $this.append(`<h3>${line.stopName}</h3>`);
+                                $this.append(`<h3>${data.stationName}</h3>`);
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
 
@@ -298,6 +332,9 @@
                             tableEl.append(template);
                         });
                     } else {
+                        if (data.stationName) {
+                            $this.append(`<h3>${data.stationName}</h3>`);
+                        }
                         $this.append(`<div class="alert alert-warning" role="alert">${settings.translation.noData} (${settings.station})</div>`);
                     }
                 });

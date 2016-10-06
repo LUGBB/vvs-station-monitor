@@ -49,49 +49,54 @@ var __extends = (this && this.__extends) || function (d, b) {
             return new Promise(function (resolve, reject) {
                 request.then(function (data) {
                     var currentdate = new Date();
-                    var ret = [];
-                    $.each(data, function (index, line) {
-                        var departureTime = line.departureTime;
-                        //delete line.departureTime;
-                        line.departure = _this.calculateDepatureTime(departureTime, currentdate);
-                        line.numberType = _this.transformLineNumberToType(line.number);
-                        line.delayType = _this.transformDelayToType(line.delay);
-                        line.delaySign = Math.sign(line.delay);
-                        line.delayAbs = Math.abs(line.delay);
-                        ret.push(line);
-                    });
-                    // filter by departure time
-                    ret = ret.filter(function (value) {
-                        return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture);
-                    });
-                    // whitelist by direction
-                    if (settings.whitelistDirection) {
-                        ret = ret.filter(function (value) {
-                            return value.direction.match(settings.whitelistDirection);
+                    var stops = [];
+                    var ret = _this.prepareStationData(station, data);
+                    console.log(ret);
+                    if (data.length) {
+                        $.each(data, function (index, line) {
+                            var departureTime = line.departureTime;
+                            //delete line.departureTime;
+                            line.departure = _this.calculateDepatureTime(departureTime, currentdate);
+                            line.numberType = _this.transformLineNumberToType(line.number);
+                            line.delayType = _this.transformDelayToType(line.delay);
+                            line.delaySign = Math.sign(line.delay);
+                            line.delayAbs = Math.abs(line.delay);
+                            stops.push(line);
                         });
-                    }
-                    // blacklist by direction
-                    if (settings.blacklistDirection) {
-                        ret = ret.filter(function (value) {
-                            return !(value.direction.match(settings.blacklistDirection));
+                        // filter by departure time
+                        stops = stops.filter(function (value) {
+                            return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture);
                         });
+                        // whitelist by direction
+                        if (settings.whitelistDirection) {
+                            stops = stops.filter(function (value) {
+                                return value.direction.match(settings.whitelistDirection);
+                            });
+                        }
+                        // blacklist by direction
+                        if (settings.blacklistDirection) {
+                            stops = stops.filter(function (value) {
+                                return !(value.direction.match(settings.blacklistDirection));
+                            });
+                        }
+                        // whitelist by line
+                        if (settings.blacklistLine) {
+                            stops = stops.filter(function (value) {
+                                return !(value.number.match(settings.blacklistLine));
+                            });
+                        }
+                        // blacklist by line
+                        if (settings.whitelistLine) {
+                            stops = stops.filter(function (value) {
+                                return value.number.match(settings.whitelistLine);
+                            });
+                        }
+                        // filter by max entires
+                        if (settings.maxEntries) {
+                            stops.splice(settings.maxEntries);
+                        }
                     }
-                    // whitelist by line
-                    if (settings.blacklistLine) {
-                        ret = ret.filter(function (value) {
-                            return !(value.number.match(settings.blacklistLine));
-                        });
-                    }
-                    // blacklist by line
-                    if (settings.whitelistLine) {
-                        ret = ret.filter(function (value) {
-                            return value.number.match(settings.whitelistLine);
-                        });
-                    }
-                    // filter by max entires
-                    if (settings.maxEntries) {
-                        ret.splice(settings.maxEntries);
-                    }
+                    ret.stops = stops;
                     resolve(ret);
                 }, function (reason) {
                     // rejection
@@ -135,6 +140,16 @@ var __extends = (this && this.__extends) || function (d, b) {
             }
             return ret;
         };
+        VVS.prototype.prepareStationData = function (station, data) {
+            var ret = {
+                stationName: false
+            };
+            if (data.length) {
+                var firstStop = data.pop();
+                ret.stationName = firstStop.stopName;
+            }
+            return ret;
+        };
         return VVS;
     }());
     var CachedVVS = (function (_super) {
@@ -143,27 +158,28 @@ var __extends = (this && this.__extends) || function (d, b) {
             _super.apply(this, arguments);
             this.cacheTime = 59;
         }
+        CachedVVS.prototype.cacheGetData = function (key) {
+            var data = localStorage.getItem(key);
+            if (data) {
+                return JSON.parse(data);
+            }
+            else {
+                return false;
+            }
+        };
+        CachedVVS.prototype.cacheSetData = function (key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        };
         CachedVVS.prototype.requestStationDepartures = function (station) {
+            var _this = this;
             if (!localStorage) {
                 return _super.prototype.requestStationDepartures.call(this, station);
             }
             var keyTimestamp = '' + station + '.timestamp';
             var keyData = '' + station + '.data';
             var currentTime = Math.floor(Date.now() / 1000);
-            var lastUptimeTime = localStorage.getItem(keyTimestamp);
-            var ret = localStorage.getItem(keyData);
-            if (lastUptimeTime) {
-                lastUptimeTime = JSON.parse(lastUptimeTime);
-            }
-            else {
-                lastUptimeTime = false;
-            }
-            if (ret) {
-                ret = JSON.parse(ret);
-            }
-            else {
-                ret = false;
-            }
+            var lastUptimeTime = this.cacheGetData(keyTimestamp);
+            var ret = this.cacheGetData(keyData);
             if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60)) {
                 return new Promise(function (resolve, reject) {
                     resolve(ret);
@@ -172,9 +188,20 @@ var __extends = (this && this.__extends) || function (d, b) {
             else {
                 ret = _super.prototype.requestStationDepartures.call(this, station);
                 ret.then(function (data) {
-                    localStorage.setItem(keyData, JSON.stringify(data));
-                    localStorage.setItem(keyTimestamp, JSON.stringify(currentTime));
+                    _this.cacheSetData(keyData, data);
+                    _this.cacheSetData(keyTimestamp, currentTime);
                 });
+            }
+            return ret;
+        };
+        CachedVVS.prototype.prepareStationData = function (station, data) {
+            var ret = _super.prototype.prepareStationData.call(this, station, data);
+            var cacheKey = '' + station + '.title';
+            if (ret.stationName) {
+                this.cacheSetData(cacheKey, ret.stationName);
+            }
+            else {
+                ret.stationName = this.cacheGetData(cacheKey);
             }
             return ret;
         };
@@ -229,10 +256,10 @@ var __extends = (this && this.__extends) || function (d, b) {
                 schedule.then(function (data) {
                     $this.html('');
                     var tableEl = false;
-                    if (data.length) {
-                        $.each(data, function (index, line) {
+                    if (data && data.stops && data.stops.length) {
+                        $.each(data.stops, function (index, line) {
                             if (index === 0) {
-                                $this.append("<h3>" + line.stopName + "</h3>");
+                                $this.append("<h3>" + data.stationName + "</h3>");
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
                             var rowClasses = [];
@@ -250,6 +277,9 @@ var __extends = (this && this.__extends) || function (d, b) {
                         });
                     }
                     else {
+                        if (data.stationName) {
+                            $this.append("<h3>" + data.stationName + "</h3>");
+                        }
                         $this.append("<div class=\"alert alert-warning\" role=\"alert\">" + settings.translation.noData + " (" + settings.station + ")</div>");
                     }
                 });
