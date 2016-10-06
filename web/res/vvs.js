@@ -278,25 +278,21 @@ var __extends = (this && this.__extends) || function (d, b) {
                                     break;
                             }
                             var rowClass = rowClasses.join(' ');
+                            var departureType = 'rel';
                             var departureValue = line.departure;
                             switch (settings.departureType) {
                                 case 'absolute':
+                                    departureType = 'abs';
                                     departureValue = line.departureTime;
                                     break;
                                 case 'intelligent':
                                     if (line.departure >= 60) {
+                                        departureType = 'abs';
                                         departureValue = line.departureTime;
                                     }
-                                    else {
-                                        departureValue = line.departure;
-                                    }
-                                    break;
-                                default:
-                                case 'relative':
-                                    departureValue = line.departure;
                                     break;
                             }
-                            var template = "\n                            <tr class=\"" + rowClass + "\">\n                                <td>\n                                    <div class=\"overall-box\">\n                                        <div class=\"departure-box\">\n                                            <div class=\"line-symbol\" data-line=\"" + line.numberType + "\" data-line=\"" + line.number + "\">" + line.number + "</div>\n                                            <div class=\"direction\">" + line.direction + "</div>\n                                        </div>\n                                        <div class=\"time-box\">\n                                            <div class=\"label label-danger delay\" data-delay=\"" + line.delayType + "\">" + line.delayAbs + "</div>\n                                            <div class=\"departure\">" + departureValue + "</div>\n                                        </div>\n                                    </div>\n                                </td>\n                            </tr>";
+                            var template = "\n                            <tr class=\"" + rowClass + "\">\n                                <td>\n                                    <div class=\"overall-box\">\n                                        <div class=\"departure-box\">\n                                            <div class=\"line-symbol\" data-line=\"" + line.numberType + "\" data-line=\"" + line.number + "\">" + line.number + "</div>\n                                            <div class=\"direction\">" + line.direction + "</div>\n                                        </div>\n                                        <div class=\"time-box\">\n                                            <div class=\"label label-danger delay\" data-delay=\"" + line.delayType + "\">" + line.delayAbs + "</div>\n                                            <div class=\"departure\" data-departure-type=\"" + departureType + "\">" + departureValue + "</div>\n                                        </div>\n                                    </div>\n                                </td>\n                            </tr>";
                             tableEl.append(template);
                         });
                     }

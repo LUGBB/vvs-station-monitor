@@ -324,24 +324,20 @@
                             var rowClass = rowClasses.join(' ');
 
 
+                            var departureType = 'rel';
                             var departureValue = line.departure;
 
                             switch(settings.departureType) {
                                 case 'absolute':
+                                    departureType = 'abs';
                                     departureValue = line.departureTime;
                                     break;
 
                                 case 'intelligent':
                                     if (line.departure >= 60) {
+                                        departureType = 'abs';
                                         departureValue = line.departureTime;
-                                    } else {
-                                        departureValue = line.departure;
                                     }
-                                    break;
-
-                                default:
-                                case 'relative':
-                                    departureValue = line.departure;
                                     break;
                             }
 
@@ -356,7 +352,7 @@
                                         </div>
                                         <div class="time-box">
                                             <div class="label label-danger delay" data-delay="${line.delayType}">${line.delayAbs}</div>
-                                            <div class="departure">${departureValue}</div>
+                                            <div class="departure" data-departure-type="${departureType}">${departureValue}</div>
                                         </div>
                                     </div>
                                 </td>
