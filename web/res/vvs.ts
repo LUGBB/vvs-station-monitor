@@ -1,6 +1,10 @@
 (function() {
     'use strict';
 
+    function padLeft(nr, n, str){
+        return Array(n-String(nr).length+1).join(str||'0')+nr;
+    }
+
     class VVS {
         requestUrl: 'vvs.php'
 
@@ -62,7 +66,8 @@
                             var departureTime = line.departureTime;
                             //delete line.departureTime;
 
-                            line.departure = this.calculateDepatureTime(departureTime, currentdate);
+                            line.departureTime = this.calculateDepatureTime(departureTime);
+                            line.departure = this.calculateDepatureTimeRel(departureTime, currentdate);
                             line.numberType = this.transformLineNumberToType(line.number);
                             line.delayType = this.transformDelayToType(line.delay);
                             line.delaySign = Math.sign(line.delay);
@@ -121,13 +126,15 @@
         }
 
         calculateDepatureTime(departure, currentdate) {
-            var ret = 0;
+            var date = new Date(`${departure.year}-${departure.month}-${departure.day} ${departure.hour}:${departure.minute}:00`)
+            return `${date.getHours()}:${padLeft(date.getMinutes(),2,0)}`;
+        }
 
-            ret += (parseInt(departure.year)*365*24*60)-(parseInt(currentdate.getFullYear())*365*24*60);  //Get the year
-            ret += (parseInt(departure.month)*12*24*60)-((parseInt(currentdate.getMonth())+1)*12*24*60);  //Get the month
-            ret += (parseInt(departure.day)*24*60)-(parseInt(currentdate.getDate())*24*60);  //Get the day
-            ret += ((parseInt(departure.hour))*60)-(parseInt(currentdate.getHours())*60);  //Get the hour
-            ret += parseInt(departure.minute)-parseInt(currentdate.getMinutes());  //Get the minute
+        calculateDepatureTimeRel(departure, currentdate) {
+            var departureTimestamp = Math.floor(Date.parse(`${departure.year}-${departure.month}-${departure.day} ${departure.hour}:${departure.minute}:00`)/1000);
+            var currentTimestamp = Math.floor(Date.now() / 1000);
+
+            var ret = Math.floor((departureTimestamp - currentTimestamp) / 60);
 
             return ret;
         }
@@ -258,11 +265,13 @@
                 whitelistDirection: false,
                 blacklistLine: false,
                 whitelistLine: false,
+                departureType: 'relative',
                 requestUrl: 'vvs.php',
                 translation: {
                     noData: 'No station info available'
                 }
             }, $this.data(), options);
+            console.log(settings);
 
             if (settings.blacklistDirection) settings.blacklistDirection = new RegExp(settings.blacklistDirection);
             if (settings.whitelistDirection) settings.whitelistDirection = new RegExp(settings.whitelistDirection);
@@ -314,6 +323,29 @@
 
                             var rowClass = rowClasses.join(' ');
 
+
+                            var departureValue = line.departure;
+
+                            switch(settings.departureType) {
+                                case 'absolute':
+                                    departureValue = line.departureTime;
+                                    break;
+
+                                case 'intelligent':
+                                    if (line.departure >= 60) {
+                                        departureValue = line.departureTime;
+                                    } else {
+                                        departureValue = line.departure;
+                                    }
+                                    break;
+
+                                default:
+                                case 'relative':
+                                    departureValue = line.departure;
+                                    break;
+                            }
+
+
                             var template = `
                             <tr class="${rowClass}">
                                 <td>
@@ -324,7 +356,7 @@
                                         </div>
                                         <div class="time-box">
                                             <div class="label label-danger delay" data-delay="${line.delayType}">${line.delayAbs}</div>
-                                            <div class="departure">${line.departure}</div>
+                                            <div class="departure">${departureValue}</div>
                                         </div>
                                     </div>
                                 </td>

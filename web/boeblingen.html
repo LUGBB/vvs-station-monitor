@@ -21,7 +21,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5004690" data-min-departure="5" data-max-departure="200"></div>
+            <div class="vvs-station" data-station="5004690" data-min-departure="5" data-max-departure="300"></div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="vvs-station" data-station="5007100" data-blacklist-line="^[0-9]+$"></div>
@@ -38,7 +38,8 @@
             loadingIndicator: '<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>',
             translation: {
                 noData: 'Keine Haltestellen Infos'
-            }
+            },
+            departureType: 'absolute'
         });
 
         // reload every 60 minutes

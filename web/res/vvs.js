@@ -5,6 +5,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 (function () {
     'use strict';
+    function padLeft(nr, n, str) {
+        return Array(n - String(nr).length + 1).join(str || '0') + nr;
+    }
     var VVS = (function () {
         function VVS() {
         }
@@ -51,12 +54,12 @@ var __extends = (this && this.__extends) || function (d, b) {
                     var currentdate = new Date();
                     var stops = [];
                     var ret = _this.prepareStationData(station, data);
-                    console.log(ret);
                     if (data.length) {
                         $.each(data, function (index, line) {
                             var departureTime = line.departureTime;
                             //delete line.departureTime;
-                            line.departure = _this.calculateDepatureTime(departureTime, currentdate);
+                            line.departureTime = _this.calculateDepatureTime(departureTime);
+                            line.departure = _this.calculateDepatureTimeRel(departureTime, currentdate);
                             line.numberType = _this.transformLineNumberToType(line.number);
                             line.delayType = _this.transformDelayToType(line.delay);
                             line.delaySign = Math.sign(line.delay);
@@ -105,12 +108,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             });
         };
         VVS.prototype.calculateDepatureTime = function (departure, currentdate) {
-            var ret = 0;
-            ret += (parseInt(departure.year) * 365 * 24 * 60) - (parseInt(currentdate.getFullYear()) * 365 * 24 * 60); //Get the year
-            ret += (parseInt(departure.month) * 12 * 24 * 60) - ((parseInt(currentdate.getMonth()) + 1) * 12 * 24 * 60); //Get the month
-            ret += (parseInt(departure.day) * 24 * 60) - (parseInt(currentdate.getDate()) * 24 * 60); //Get the day
-            ret += ((parseInt(departure.hour)) * 60) - (parseInt(currentdate.getHours()) * 60); //Get the hour
-            ret += parseInt(departure.minute) - parseInt(currentdate.getMinutes()); //Get the minute
+            var date = new Date(departure.year + "-" + departure.month + "-" + departure.day + " " + departure.hour + ":" + departure.minute + ":00");
+            return date.getHours() + ":" + padLeft(date.getMinutes(), 2, 0);
+        };
+        VVS.prototype.calculateDepatureTimeRel = function (departure, currentdate) {
+            var departureTimestamp = Math.floor(Date.parse(departure.year + "-" + departure.month + "-" + departure.day + " " + departure.hour + ":" + departure.minute + ":00") / 1000);
+            var currentTimestamp = Math.floor(Date.now() / 1000);
+            var ret = Math.floor((departureTimestamp - currentTimestamp) / 60);
             return ret;
         };
         VVS.prototype.transformLineNumberToType = function (lineNumber) {
@@ -225,11 +229,13 @@ var __extends = (this && this.__extends) || function (d, b) {
                 whitelistDirection: false,
                 blacklistLine: false,
                 whitelistLine: false,
+                departureType: 'relative',
                 requestUrl: 'vvs.php',
                 translation: {
                     noData: 'No station info available'
                 }
             }, $this.data(), options);
+            console.log(settings);
             if (settings.blacklistDirection)
                 settings.blacklistDirection = new RegExp(settings.blacklistDirection);
             if (settings.whitelistDirection)
@@ -272,7 +278,25 @@ var __extends = (this && this.__extends) || function (d, b) {
                                     break;
                             }
                             var rowClass = rowClasses.join(' ');
-                            var template = "\n                            <tr class=\"" + rowClass + "\">\n                                <td>\n                                    <div class=\"overall-box\">\n                                        <div class=\"departure-box\">\n                                            <div class=\"line-symbol\" data-line=\"" + line.numberType + "\" data-line=\"" + line.number + "\">" + line.number + "</div>\n                                            <div class=\"direction\">" + line.direction + "</div>\n                                        </div>\n                                        <div class=\"time-box\">\n                                            <div class=\"label label-danger delay\" data-delay=\"" + line.delayType + "\">" + line.delayAbs + "</div>\n                                            <div class=\"departure\">" + line.departure + "</div>\n                                        </div>\n                                    </div>\n                                </td>\n                            </tr>";
+                            var departureValue = line.departure;
+                            switch (settings.departureType) {
+                                case 'absolute':
+                                    departureValue = line.departureTime;
+                                    break;
+                                case 'intelligent':
+                                    if (line.departure >= 60) {
+                                        departureValue = line.departureTime;
+                                    }
+                                    else {
+                                        departureValue = line.departure;
+                                    }
+                                    break;
+                                default:
+                                case 'relative':
+                                    departureValue = line.departure;
+                                    break;
+                            }
+                            var template = "\n                            <tr class=\"" + rowClass + "\">\n                                <td>\n                                    <div class=\"overall-box\">\n                                        <div class=\"departure-box\">\n                                            <div class=\"line-symbol\" data-line=\"" + line.numberType + "\" data-line=\"" + line.number + "\">" + line.number + "</div>\n                                            <div class=\"direction\">" + line.direction + "</div>\n                                        </div>\n                                        <div class=\"time-box\">\n                                            <div class=\"label label-danger delay\" data-delay=\"" + line.delayType + "\">" + line.delayAbs + "</div>\n                                            <div class=\"departure\">" + departureValue + "</div>\n                                        </div>\n                                    </div>\n                                </td>\n                            </tr>";
                             tableEl.append(template);
                         });
                     }

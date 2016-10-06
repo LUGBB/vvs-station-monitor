@@ -48,8 +48,9 @@ All jQuery plugin configuration options for `vvsStation` can be easily configure
 
 
 Configuration         | HTML attribute           | Description
-----------------------|--------------------------|------------------------------------------------------------------------
+----------------------|--------------------------|--------------------------------------------------------------------------------------
 station               | data-station             | VVS Station ID
+departureType         | data-departure-type      | Specifies how the departure should be displayed (relative, absolute, intelligent)
 minDeparture          | data-min-departure       | Minimum depature time
 maxDeparture          | data-max-departure       | Maximum depature time
 blacklistDirection    | data-blacklist-direction | Blacklist (regexp) for destionation (eg. Herrenberg, Schorndorf..)
