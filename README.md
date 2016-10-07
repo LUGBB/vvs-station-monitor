@@ -58,3 +58,7 @@ whitelistDirection    | data-whitelist-direction | Whitelist (regexp) for destio
 blacklistLine         | data-blacklist-line      | Blacklist (regexp) for Line (eg. S1, 82, R123)
 whitelistLine         | data-whitelist-line      | Whitelist (regexp) for Line (eg. S1, 82, R123)
 maxEntries            | data-max-entries         | Max numbers of departures which will be shown
+
+## Special thanks
+
+Special thanks to the guys from [OK Lab Stuttgart](http://codefor.de/stuttgart/) for the [VVS Api](http://codefor.de/projekte/2015-06-09-stgt-efa-meta-api)
