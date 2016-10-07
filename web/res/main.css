@@ -78,9 +78,6 @@
 .vvs-station div.departure {
   display: inline-block;
 }
-.vvs-station div.departure[data-departure-type^=rel]::after {
-  content: " min ";
-}
 .vvs-station div.delay {
   display: none;
   font-size: 1.8rem;

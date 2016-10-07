@@ -126,17 +126,25 @@
         }
 
         calculateDepatureTime(departure, currentdate) {
-            var date = new Date(`${departure.year}-${departure.month}-${departure.day} ${departure.hour}:${departure.minute}:00`)
+            var date = this.createDate(departure.year,departure.month,departure.day,departure.hour,departure.minute,0);
             return `${date.getHours()}:${padLeft(date.getMinutes(),2,0)}`;
         }
 
         calculateDepatureTimeRel(departure, currentdate) {
-            var departureTimestamp = Math.floor(Date.parse(`${departure.year}-${departure.month}-${departure.day} ${departure.hour}:${departure.minute}:00`)/1000);
+            var departureTimestamp = this.dateToTimestamp(this.createDate(departure.year,departure.month,departure.day,departure.hour,departure.minute,0));
             var currentTimestamp = Math.floor(Date.now() / 1000);
 
             var ret = Math.floor((departureTimestamp - currentTimestamp) / 60);
 
             return ret;
+        }
+
+        createDate(year, month, day, hour, minute, second) {
+            return new Date(`${year}/${month}/${day} ${hour}:${minute}:${second}`);
+        }
+
+        dateToTimestamp(date) {
+            return Math.floor(date.getTime() / 1000)''
         }
 
         transformLineNumberToType(lineNumber) {
@@ -173,12 +181,17 @@
 
         prepareStationData(station, data) {
             var ret = {
-                stationName: false
+                station: {
+                    name: false,
+                    coordinates: false,
+                },
+                stops: []
             };
 
             if (data.length) {
                 var firstStop = data.pop()
-                ret.stationName = firstStop.stopName;
+                ret.station.name = firstStop.stopName;
+                ret.station.coordinates = firstStop.stationCoordinates;
             }
 
             return ret;
@@ -233,12 +246,19 @@
         prepareStationData(station, data) {
             var ret = super.prepareStationData(station, data);
 
-            var cacheKey = '' + station + '.title';
+            var cacheKeyTitle = '' + station + '.title';
+            var cacheKeyInfo = '' + station + '.info';
 
-            if (ret.stationName) {
-                this.cacheSetData(cacheKey, ret.stationName);
+            if (ret.station.name) {
+                this.cacheSetData(cacheKeyInfo, ret.station);
             } else {
-                ret.stationName = this.cacheGetData(cacheKey);
+                // deprecated
+                ret.station.name = this.cacheGetData(cacheKeyTitle);
+
+                var stationInfo = this.cacheGetData(cacheKeyInfo);
+                if (stationInfo) {
+                    ret.station = stationInfo;
+                }
             }
 
             return ret;
@@ -254,7 +274,7 @@
             // default settings
             var settings = $.extend({
                 updateTime:  60 * 1000,
-                updateTimeRandom: 5 * 1000,
+                updateTimeRandom: 2 * 1000,
                 firstUpdateTimeRandom: 0,
                 station: false,
                 maxEntries: 20,
@@ -271,7 +291,6 @@
                     noData: 'No station info available'
                 }
             }, $this.data(), options);
-            console.log(settings);
 
             if (settings.blacklistDirection) settings.blacklistDirection = new RegExp(settings.blacklistDirection);
             if (settings.whitelistDirection) settings.whitelistDirection = new RegExp(settings.whitelistDirection);
@@ -291,7 +310,18 @@
                 if (!$this.find('.spinner-content').length) {
                     $this.append('<div class="spinner-content">' + settings.loadingIndicator + '</div>');
                 }
-            }
+            };
+
+            var humanRelativeTime = (value) => {
+                if (value >= 60) {
+                    var hours   = Math.floor(value / 60);
+                    var minutes = padLeft(Math.floor((value - (hours * 60)) / 60),2,"0");
+
+                    return `${hours} <small>h</small> ${minutes} <small>m</small>`;
+                } else {
+                    return `${value} <small>min</small>`;
+                }
+            };
 
             var updateSchedule = () => {
                 addLoadingIndicator();
@@ -305,7 +335,7 @@
                     if(data && data.stops && data.stops.length) {
                         $.each(data.stops, (index, line) => {
                             if (index === 0) {
-                                $this.append(`<h3>${data.stationName}</h3>`);
+                                $this.append(`<h3>${data.station.name}</h3>`);
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
 
@@ -325,7 +355,7 @@
 
 
                             var departureType = 'rel';
-                            var departureValue = line.departure;
+                            var departureValue = humanRelativeTime(line.departure);
 
                             switch(settings.departureType) {
                                 case 'absolute':
@@ -360,8 +390,8 @@
                             tableEl.append(template);
                         });
                     } else {
-                        if (data.stationName) {
-                            $this.append(`<h3>${data.stationName}</h3>`);
+                        if (data.station.name) {
+                            $this.append(`<h3>${data.station.name}</h3>`);
                         }
                         $this.append(`<div class="alert alert-warning" role="alert">${settings.translation.noData} (${settings.station})</div>`);
                     }
