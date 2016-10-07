@@ -273,8 +273,8 @@
 
             // default settings
             var settings = $.extend({
-                updateTime:  60 * 1000,
-                updateTimeRandom: 2 * 1000,
+                updateTime:  30 * 1000,
+                updateTimeRandom: 5 * 1000,
                 firstUpdateTimeRandom: 0,
                 station: false,
                 maxEntries: 20,
