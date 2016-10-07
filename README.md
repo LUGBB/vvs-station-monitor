@@ -13,6 +13,12 @@ and will display also the delay.
 The station monitor will refresh periodically and can be used for
 infomation monitors.
 
+### Examples
+
+- [Stuttgart City](https://stationmonitor.lugbb.org/)
+- [jweiland.net](https://stationmonitor.lugbb.org/jweiland.html)
+- [Shackspace](https://stationmonitor.lugbb.org/shackspace.html)
+
 ## Configuration
 
 Most configuration can be set in the HTML eg. custom filtering and 
