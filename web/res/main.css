@@ -78,6 +78,21 @@
 .vvs-station div.departure {
   display: inline-block;
 }
+.vvs-station div.departure i {
+  font-style: normal;
+}
+.vvs-station div.departure i.time.minutes::after {
+  content: "min";
+  font-size: 0.8em;
+}
+.vvs-station div.departure i.hours-minutes .hour::after {
+  content: "h ";
+  font-size: 0.8em;
+}
+.vvs-station div.departure i.hours-minutes .minute::after {
+  content: "min";
+  font-size: 0.8em;
+}
 .vvs-station div.delay {
   display: none;
   font-size: 1.8rem;

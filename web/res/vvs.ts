@@ -220,24 +220,29 @@
                 return super.requestStationDepartures(station);
             }
 
-            var keyTimestamp = '' + station + '.timestamp';
-            var keyData      = '' + station + '.data';
+            try {
+                var keyTimestamp = '' + station + '.timestamp';
+                var keyData = '' + station + '.data';
 
-            var currentTime  = Math.floor(Date.now() / 1000);
+                var currentTime = Math.floor(Date.now() / 1000);
 
-            var lastUptimeTime = this.cacheGetData(keyTimestamp);
-            var ret            = this.cacheGetData(keyData);
+                var lastUptimeTime = this.cacheGetData(keyTimestamp);
+                var ret = this.cacheGetData(keyData);
 
-            if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60) ) {
-                return new Promise((resolve, reject) => {
-                    resolve(ret);
-                });
-            } else {
-                ret = super.requestStationDepartures(station);
-                ret.then((data) => {
-                    this.cacheSetData(keyData, data);
-                    this.cacheSetData(keyTimestamp, currentTime);
-                });
+                if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60)) {
+                    return new Promise((resolve, reject) => {
+                        resolve(ret);
+                    });
+                } else {
+                    ret = super.requestStationDepartures(station);
+                    ret.then((data) => {
+                        this.cacheSetData(keyData, data);
+                        this.cacheSetData(keyTimestamp, currentTime);
+                    });
+                }
+            } catch (e) {
+                // fallback
+                return super.requestStationDepartures(station);
             }
 
             return ret;
@@ -246,19 +251,23 @@
         prepareStationData(station, data) {
             var ret = super.prepareStationData(station, data);
 
-            var cacheKeyTitle = '' + station + '.title';
-            var cacheKeyInfo = '' + station + '.info';
+            try {
+                var cacheKeyTitle = '' + station + '.title';
+                var cacheKeyInfo = '' + station + '.info';
 
-            if (ret.station.name) {
-                this.cacheSetData(cacheKeyInfo, ret.station);
-            } else {
-                // deprecated
-                ret.station.name = this.cacheGetData(cacheKeyTitle);
+                if (ret.station.name) {
+                    this.cacheSetData(cacheKeyInfo, ret.station);
+                } else {
+                    // deprecated
+                    ret.station.name = this.cacheGetData(cacheKeyTitle);
 
-                var stationInfo = this.cacheGetData(cacheKeyInfo);
-                if (stationInfo) {
-                    ret.station = stationInfo;
+                    var stationInfo = this.cacheGetData(cacheKeyInfo);
+                    if (stationInfo) {
+                        ret.station = stationInfo;
+                    }
                 }
+            } catch (e) {
+                // error
             }
 
             return ret;
@@ -315,11 +324,11 @@
             var humanRelativeTime = (value) => {
                 if (value >= 60) {
                     var hours   = Math.floor(value / 60);
-                    var minutes = padLeft(Math.floor((value - (hours * 60)) / 60),2,"0");
+                    var minutes = padLeft(Math.floor(value % 60),2,"0");
 
-                    return `${hours} <small>h</small> ${minutes} <small>m</small>`;
+                    return `<i class="time hours-minutes"><i class="hour">${hours}</i><i class="minute">${minutes}</i>`;
                 } else {
-                    return `${value} <small>min</small>`;
+                    return `<i class="time minutes">${value}</i>`;
                 }
             };
 

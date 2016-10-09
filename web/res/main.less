@@ -106,6 +106,28 @@
 
     div.departure {
         display: inline-block;
+
+        i {
+            font-style: normal;
+
+            &.time.minutes::after {
+                content: "min";
+                font-size: 0.8em;
+            }
+
+            &.hours-minutes {
+
+                .hour::after {
+                    content: "h ";
+                    font-size: 0.8em;
+                }
+
+                .minute::after {
+                    content: "min";
+                    font-size: 0.8em;
+                }
+            }
+        }
     }
 
     div.delay {
