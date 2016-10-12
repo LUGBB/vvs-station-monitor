@@ -283,15 +283,19 @@ var __extends = (this && this.__extends) || function (d, b) {
                     $this.append('<div class="spinner-content">' + settings.loadingIndicator + '</div>');
                 }
             };
-            var humanRelativeTime = function (value) {
-                if (value >= 60) {
-                    var hours = Math.floor(value / 60);
-                    var minutes = padLeft(Math.floor(value % 60), 2, "0");
-                    return "<i class=\"time hours-minutes\"><i class=\"hour\">" + hours + "</i><i class=\"minute\">" + minutes + "</i>";
+            var humanRelativeTime = function (line) {
+                var ret = '';
+                var departure = line.departure;
+                if (departure >= 60) {
+                    var hours = Math.floor(departure / 60);
+                    var minutes = padLeft(Math.floor(departure % 60), 2, "0");
+                    ret += "<i class=\"time hours-minutes\"><i class=\"hour\">" + hours + "</i><i class=\"minute\">" + minutes + "</i></i>";
                 }
                 else {
-                    return "<i class=\"time minutes\">" + value + "</i>";
+                    ret += "<i class=\"time minutes\">" + departure + "</i>";
                 }
+                ret += "<i class=\"time absolute hover\">" + line.departureTime + "</i>";
+                return ret;
             };
             var updateSchedule = function () {
                 addLoadingIndicator();
@@ -316,7 +320,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                             }
                             var rowClass = rowClasses.join(' ');
                             var departureType = 'rel';
-                            var departureValue = humanRelativeTime(line.departure);
+                            var departureValue = humanRelativeTime(line);
                             switch (settings.departureType) {
                                 case 'absolute':
                                     departureType = 'abs';

@@ -3,6 +3,7 @@
     position: relative;
     padding: 0;
     margin-top: 1rem;
+    cursor: default;
 
     h3 {
         font-size: 2.5rem;
@@ -127,6 +128,27 @@
                     font-size: 0.8em;
                 }
             }
+
+            &.time.absolute.hover {
+                display: none;
+            }
+        }
+    }
+
+    tr:hover  {
+
+        &,
+        td,
+        .time-box {
+            background-color: #dff0d8 !important;
+        }
+
+        .time {
+            display: none;
+        }
+
+        .time.hover {
+            display: inline-block !important;
         }
     }
 
