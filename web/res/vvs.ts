@@ -207,7 +207,7 @@
             if (data) {
                 return JSON.parse(data);
             } else {
-                return false;
+                throw new Exception('Could not get cache data');
             }
         }
 
@@ -216,58 +216,79 @@
         }
 
         requestStationDepartures(station) {
-            if (!localStorage) {
-                return super.requestStationDepartures(station);
-            }
+            var promise = false;
 
             try {
+                if (!localStorage) {
+                    throw new Exception();
+                }
+
                 var keyTimestamp = '' + station + '.timestamp';
                 var keyData = '' + station + '.data';
 
                 var currentTime = Math.floor(Date.now() / 1000);
 
-                var lastUptimeTime = this.cacheGetData(keyTimestamp);
-                var ret = this.cacheGetData(keyData);
+                try {
+                    var lastUptimeTime = this.cacheGetData(keyTimestamp);
+                    var ret = this.cacheGetData(keyData);
+                } catch (e) {
+                    lastUptimeTime = false;
+                    ret = false;
+                }
 
                 if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60)) {
-                    return new Promise((resolve, reject) => {
+                    promise = new Promise((resolve, reject) => {
                         resolve(ret);
                     });
                 } else {
-                    ret = super.requestStationDepartures(station);
-                    ret.then((data) => {
-                        this.cacheSetData(keyData, data);
-                        this.cacheSetData(keyTimestamp, currentTime);
+                    promise = super.requestStationDepartures(station);
+                    promise.then((data) => {
+                        console.log(keyData, keyTimestamp);
+
+                        try {
+                            this.cacheSetData(keyData, data);
+                            this.cacheSetData(keyTimestamp, currentTime);
+                        } catch (e) {
+                            // catch set error
+                        }
                     });
                 }
             } catch (e) {
                 // fallback
-                return super.requestStationDepartures(station);
+                promise = super.requestStationDepartures(station);
             }
 
-            return ret;
+            return promise;
         }
 
         prepareStationData(station, data) {
             var ret = super.prepareStationData(station, data);
 
-            try {
-                var cacheKeyTitle = '' + station + '.title';
-                var cacheKeyInfo = '' + station + '.info';
+            var cacheKeyTitle = '' + station + '.title';
+            var cacheKeyInfo = '' + station + '.info';
 
-                if (ret.station.name) {
+            if (ret.station.name) {
+                try {
                     this.cacheSetData(cacheKeyInfo, ret.station);
-                } else {
+                } catch (e) {
+                    // catch fetch error
+                }
+            } else {
+                try {
                     // deprecated
                     ret.station.name = this.cacheGetData(cacheKeyTitle);
+                } catch (e) {
+                    // catch fetch error
+                }
 
+                try {
                     var stationInfo = this.cacheGetData(cacheKeyInfo);
                     if (stationInfo) {
                         ret.station = stationInfo;
                     }
+                } catch (e) {
+                    // catch fetch error
                 }
-            } catch (e) {
-                // error
             }
 
             return ret;
@@ -314,6 +335,10 @@
             if (settings.requestUrl) {
                 vvs.setRequestUrl(settings.requestUrl);
             }
+
+            $this.on('click', () => {
+               $this.toggleClass('hover');
+            });
 
             var addLoadingIndicator = () => {
                 if (!$this.find('.spinner-content').length) {

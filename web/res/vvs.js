@@ -180,7 +180,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 return JSON.parse(data);
             }
             else {
-                return false;
+                throw new Exception('Could not get cache data');
             }
         };
         CachedVVS.prototype.cacheSetData = function (key, value) {
@@ -188,52 +188,72 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         CachedVVS.prototype.requestStationDepartures = function (station) {
             var _this = this;
-            if (!localStorage) {
-                return _super.prototype.requestStationDepartures.call(this, station);
-            }
+            var promise = false;
             try {
+                if (!localStorage) {
+                    throw new Exception();
+                }
                 var keyTimestamp = '' + station + '.timestamp';
                 var keyData = '' + station + '.data';
                 var currentTime = Math.floor(Date.now() / 1000);
-                var lastUptimeTime = this.cacheGetData(keyTimestamp);
-                var ret = this.cacheGetData(keyData);
+                try {
+                    var lastUptimeTime = this.cacheGetData(keyTimestamp);
+                    var ret = this.cacheGetData(keyData);
+                }
+                catch (e) {
+                    lastUptimeTime = false;
+                    ret = false;
+                }
                 if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60)) {
-                    return new Promise(function (resolve, reject) {
+                    promise = new Promise(function (resolve, reject) {
                         resolve(ret);
                     });
                 }
                 else {
-                    ret = _super.prototype.requestStationDepartures.call(this, station);
-                    ret.then(function (data) {
-                        _this.cacheSetData(keyData, data);
-                        _this.cacheSetData(keyTimestamp, currentTime);
+                    promise = _super.prototype.requestStationDepartures.call(this, station);
+                    promise.then(function (data) {
+                        console.log(keyData, keyTimestamp);
+                        try {
+                            _this.cacheSetData(keyData, data);
+                            _this.cacheSetData(keyTimestamp, currentTime);
+                        }
+                        catch (e) {
+                        }
                     });
                 }
             }
             catch (e) {
                 // fallback
-                return _super.prototype.requestStationDepartures.call(this, station);
+                promise = _super.prototype.requestStationDepartures.call(this, station);
             }
-            return ret;
+            return promise;
         };
         CachedVVS.prototype.prepareStationData = function (station, data) {
             var ret = _super.prototype.prepareStationData.call(this, station, data);
-            try {
-                var cacheKeyTitle = '' + station + '.title';
-                var cacheKeyInfo = '' + station + '.info';
-                if (ret.station.name) {
+            var cacheKeyTitle = '' + station + '.title';
+            var cacheKeyInfo = '' + station + '.info';
+            if (ret.station.name) {
+                try {
                     this.cacheSetData(cacheKeyInfo, ret.station);
                 }
-                else {
+                catch (e) {
+                }
+            }
+            else {
+                try {
                     // deprecated
                     ret.station.name = this.cacheGetData(cacheKeyTitle);
+                }
+                catch (e) {
+                }
+                try {
                     var stationInfo = this.cacheGetData(cacheKeyInfo);
                     if (stationInfo) {
                         ret.station = stationInfo;
                     }
                 }
-            }
-            catch (e) {
+                catch (e) {
+                }
             }
             return ret;
         };
@@ -278,6 +298,9 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (settings.requestUrl) {
                 vvs.setRequestUrl(settings.requestUrl);
             }
+            $this.on('click', function () {
+                $this.toggleClass('hover');
+            });
             var addLoadingIndicator = function () {
                 if (!$this.find('.spinner-content').length) {
                     $this.append('<div class="spinner-content">' + settings.loadingIndicator + '</div>');
