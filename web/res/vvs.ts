@@ -340,6 +340,10 @@
                $this.toggleClass('hover');
             });
 
+            $this.on('tab', () => {
+                $this.toggleClass('hover');
+            });
+
             var addLoadingIndicator = () => {
                 if (!$this.find('.spinner-content').length) {
                     $this.append('<div class="spinner-content">' + settings.loadingIndicator + '</div>');

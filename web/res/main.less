@@ -3,7 +3,7 @@
     position: relative;
     padding: 0;
     margin-top: 1rem;
-    cursor: default;
+    cursor: pointer;
 
     h3 {
         font-size: 2.5rem;
@@ -136,13 +136,15 @@
     }
 
     tr:hover  {
-
         &,
         td,
         .time-box {
             background-color: #dff0d8 !important;
         }
+    }
 
+    &.hover,
+    &:hover {
         .time {
             display: none;
         }

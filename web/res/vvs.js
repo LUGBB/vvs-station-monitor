@@ -301,6 +301,9 @@ var __extends = (this && this.__extends) || function (d, b) {
             $this.on('click', function () {
                 $this.toggleClass('hover');
             });
+            $this.on('tab', function () {
+                $this.toggleClass('hover');
+            });
             var addLoadingIndicator = function () {
                 if (!$this.find('.spinner-content').length) {
                     $this.append('<div class="spinner-content">' + settings.loadingIndicator + '</div>');
