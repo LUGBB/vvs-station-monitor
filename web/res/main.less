@@ -143,14 +143,24 @@
         }
     }
 
+    .time.relative {
+        -webkit-animation: fade 0.5s;
+        animation: fade 0.5s;
+        opacity: 1;
+    }
+
     &.hover,
+    &.time-toggle,
     &:hover {
         .time {
             display: none;
         }
 
-        .time.hover {
+        .time.absolute {
             display: inline-block !important;
+            -webkit-animation: fade 0.5s;
+            animation: fade 0.5s;
+            opacity: 1;
         }
     }
 
@@ -171,6 +181,15 @@
             content: "-";
         }
     }
+
+    /* -fail- */
+    @-webkit-keyframes fade {
+        from {opacity: 0}
+        to {opacity: 1}
+    }@keyframes fade {
+         from {opacity: 0}
+         to {opacity: 1}
+     }
 
 }
 

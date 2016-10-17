@@ -3,6 +3,7 @@
   padding: 0;
   margin-top: 1rem;
   cursor: pointer;
+  /* -fail- */
 }
 .vvs-station h3 {
   font-size: 2.5rem;
@@ -102,13 +103,23 @@
 .vvs-station tr:hover .time-box {
   background-color: #dff0d8 !important;
 }
+.vvs-station .time.relative {
+  -webkit-animation: fade 0.5s;
+  animation: fade 0.5s;
+  opacity: 1;
+}
 .vvs-station.hover .time,
+.vvs-station.time-toggle .time,
 .vvs-station:hover .time {
   display: none;
 }
-.vvs-station.hover .time.hover,
-.vvs-station:hover .time.hover {
+.vvs-station.hover .time.absolute,
+.vvs-station.time-toggle .time.absolute,
+.vvs-station:hover .time.absolute {
   display: inline-block !important;
+  -webkit-animation: fade 0.5s;
+  animation: fade 0.5s;
+  opacity: 1;
 }
 .vvs-station div.delay {
   display: none;
@@ -123,6 +134,22 @@
 }
 .vvs-station div.delay[data-delay="-"]::before {
   content: "-";
+}
+@-webkit-keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 .spinner-content {
   position: absolute;

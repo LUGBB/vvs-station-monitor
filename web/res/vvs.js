@@ -212,7 +212,6 @@ var __extends = (this && this.__extends) || function (d, b) {
                 else {
                     promise = _super.prototype.requestStationDepartures.call(this, station);
                     promise.then(function (data) {
-                        console.log(keyData, keyTimestamp);
                         try {
                             _this.cacheSetData(keyData, data);
                             _this.cacheSetData(keyTimestamp, currentTime);
@@ -272,6 +271,9 @@ var __extends = (this && this.__extends) || function (d, b) {
                 maxEntries: 20,
                 minDeparture: 3,
                 maxDeparture: 120,
+                enableTimeToggle: 0,
+                toggleTime: 10,
+                intelligentTimeThreshold: 60,
                 loadingIndicator: '',
                 blacklistDirection: false,
                 whitelistDirection: false,
@@ -304,6 +306,11 @@ var __extends = (this && this.__extends) || function (d, b) {
             $this.on('tab', function () {
                 $this.toggleClass('hover');
             });
+            if (settings.enableTimeToggle) {
+                setInterval(function () {
+                    $this.toggleClass('time-toggle');
+                }, settings.toggleTime * 1000);
+            }
             var addLoadingIndicator = function () {
                 if (!$this.find('.spinner-content').length) {
                     $this.append('<div class="spinner-content">' + settings.loadingIndicator + '</div>');
@@ -315,12 +322,13 @@ var __extends = (this && this.__extends) || function (d, b) {
                 if (departure >= 60) {
                     var hours = Math.floor(departure / 60);
                     var minutes = padLeft(Math.floor(departure % 60), 2, "0");
-                    ret += "<i class=\"time hours-minutes\"><i class=\"hour\">" + hours + "</i><i class=\"minute\">" + minutes + "</i></i>";
+                    ret += "<i class=\"time relative hours-minutes\"><i class=\"hour\">" + hours + "</i><i class=\"minute\">" + minutes + "</i></i>";
                 }
                 else {
-                    ret += "<i class=\"time minutes\">" + departure + "</i>";
+                    ret += "<i class=\"time relative minutes\">" + departure + "</i>";
                 }
                 ret += "<i class=\"time absolute hover\">" + line.departureTime + "</i>";
+                ret = "<i class=\"time-combined\">" + ret + "</i>";
                 return ret;
             };
             var updateSchedule = function () {
@@ -353,7 +361,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                                     departureValue = line.departureTime;
                                     break;
                                 case 'intelligent':
-                                    if (line.departure >= 60) {
+                                    if (line.departure >= settings.intelligentTimeThreshold) {
                                         departureType = 'abs';
                                         departureValue = line.departureTime;
                                     }
