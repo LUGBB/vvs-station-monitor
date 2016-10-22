@@ -76,10 +76,16 @@
                             stops.push(line);
                         });
 
-                        // filter by departure time
-                        stops = stops.filter((value) => {
-                            return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture)
+                        stops.sort((a, b) => {
+                            return a.departure - b.departure;
                         });
+
+                        // filter by departure time
+                        if (!settings.maxEntries || stops.length >= settings.maxEntries) {
+                            stops = stops.filter((value) => {
+                                return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture)
+                            });
+                        }
 
                         // whitelist by direction
                         if (settings.whitelistDirection) {

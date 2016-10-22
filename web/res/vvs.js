@@ -66,10 +66,15 @@ var __extends = (this && this.__extends) || function (d, b) {
                             line.delayAbs = Math.abs(line.delay);
                             stops.push(line);
                         });
-                        // filter by departure time
-                        stops = stops.filter(function (value) {
-                            return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture);
+                        stops.sort(function (a, b) {
+                            return a.departure - b.departure;
                         });
+                        // filter by departure time
+                        if (!settings.maxEntries || stops.length >= settings.maxEntries) {
+                            stops = stops.filter(function (value) {
+                                return (value.departure >= settings.minDeparture && value.departure <= settings.maxDeparture);
+                            });
+                        }
                         // whitelist by direction
                         if (settings.whitelistDirection) {
                             stops = stops.filter(function (value) {
