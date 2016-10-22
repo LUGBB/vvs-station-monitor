@@ -1,3 +1,13 @@
+#clock {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  display: inline-block;
+  padding: 1rem 2rem;
+  margin: 0;
+  cursor: pointer;
+  font-size: 4rem;
+}
 .vvs-station {
   position: relative;
   padding: 0;
@@ -103,13 +113,11 @@
   opacity: 1;
 }
 .vvs-station.hover .time,
-.vvs-station.time-toggle .time,
-.vvs-station:hover .time {
+.vvs-station.time-toggle .time {
   display: none;
 }
 .vvs-station.hover .time.absolute,
-.vvs-station.time-toggle .time.absolute,
-.vvs-station:hover .time.absolute {
+.vvs-station.time-toggle .time.absolute {
   display: inline-block !important;
   -webkit-animation: fade 0.5s;
   animation: fade 0.5s;

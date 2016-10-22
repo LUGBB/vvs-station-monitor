@@ -415,5 +415,20 @@ var __extends = (this && this.__extends) || function (d, b) {
         });
         return this;
     };
+    $.fn.clock = function (options) {
+        this.each(function (index, el) {
+            var $this = $(el);
+            $this.on('click', function () {
+                $this.hide();
+            });
+            var callback = function () {
+                var date = new Date();
+                $this.text(padLeft(date.getHours(), 2, 0) + ":" + padLeft(date.getMinutes(), 2, 0) + ":" + padLeft(date.getSeconds(), 2, 0));
+            };
+            setInterval(callback, 900);
+            callback();
+        });
+    };
+    ;
 })();
 //# sourceMappingURL=vvs.js.map

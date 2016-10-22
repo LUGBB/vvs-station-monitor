@@ -495,4 +495,24 @@
         });
         return this;
     };
+
+    $.fn.clock = function(options) {
+        this.each(function(index, el) {
+            var $this = $(el);
+
+            $this.on('click', () => {
+                $this.hide();
+            });
+
+            var callback = () => {
+                var date = new Date();
+                $this.text(`${padLeft(date.getHours(),2,0)}:${padLeft(date.getMinutes(),2,0)}:${padLeft(date.getSeconds(),2,0)}`)
+            };
+
+            setInterval(callback, 900);
+            callback();
+        });
+    });
+
+
 })();

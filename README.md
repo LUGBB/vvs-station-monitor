@@ -68,6 +68,21 @@ maxEntries               | data-max-entries                | Max numbers of depa
 toggleTime               | data-toggle-time                | Seconds between time toggle (see enableTimeToggle)
 enableTimeToggle         | data-enable-time-toggle         | Toggle between absolute and relative time
 
+## Clock
+
+There is also support for a clock in the right bottom edge, eg:
+
+```
+<div id="clock" class="alert alert-info"></div>
+<script>
+    jQuery( document ).ready(function($) {
+        $("#clock").clock();
+    });
+</script>
+
+```
+
+
 ## Special thanks
 
 Special thanks to the guys from [OK Lab Stuttgart](http://codefor.de/stuttgart/) for the [VVS Api](http://codefor.de/projekte/2015-06-09-stgt-efa-meta-api)
