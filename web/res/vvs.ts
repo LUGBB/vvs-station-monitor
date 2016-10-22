@@ -63,8 +63,12 @@
 
                     if (data.length) {
                         $.each(data, (index,line) => {
+                            // filter "trains stops here"
+                            if (line.direction === 'Zug endet hier') {
+                                return;
+                            }
+
                             var departureTime = line.departureTime;
-                            //delete line.departureTime;
 
                             line.departureTime = this.calculateDepatureTime(departureTime);
                             line.departure = this.calculateDepatureTimeRel(departureTime, currentdate);

@@ -56,8 +56,11 @@ var __extends = (this && this.__extends) || function (d, b) {
                     var ret = _this.prepareStationData(station, data);
                     if (data.length) {
                         $.each(data, function (index, line) {
+                            // filter "trains stops here"
+                            if (line.direction === 'Zug endet hier') {
+                                return;
+                            }
                             var departureTime = line.departureTime;
-                            //delete line.departureTime;
                             line.departureTime = _this.calculateDepatureTime(departureTime);
                             line.departure = _this.calculateDepatureTimeRel(departureTime, currentdate);
                             line.numberType = _this.transformLineNumberToType(line.number);
