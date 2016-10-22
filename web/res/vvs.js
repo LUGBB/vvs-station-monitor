@@ -46,7 +46,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                 blacklistDirection: false,
                 whitelistDirection: false,
                 blacklistLine: false,
-                whitelistLine: false
+                whitelistLine: false,
+                delayWarnings: []
             }, options);
             var request = this.requestStationDepartures(station);
             return new Promise(function (resolve, reject) {
@@ -67,6 +68,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                             line.delayType = _this.transformDelayToType(line.delay);
                             line.delaySign = Math.sign(line.delay);
                             line.delayAbs = Math.abs(line.delay);
+                            line.delayClass = _this.calculateDelayClass(line, settings);
                             stops.push(line);
                         });
                         stops.sort(function (a, b) {
@@ -157,6 +159,24 @@ var __extends = (this && this.__extends) || function (d, b) {
                     ret = "+";
                     break;
             }
+            return ret;
+        };
+        VVS.prototype.calculateDelayClass = function (line, settings) {
+            var ret = '';
+            $.each(settings.delayWarnings, function (index, delayConf) {
+                switch (Math.sign(delayConf.delay)) {
+                    case -1:
+                        if (line.delay <= delayConf.delay) {
+                            ret = delayConf.className;
+                        }
+                        break;
+                    case 1:
+                        if (line.delay >= delayConf.delay) {
+                            ret = delayConf.className;
+                        }
+                        break;
+                }
+            });
             return ret;
         };
         VVS.prototype.prepareStationData = function (station, data) {
@@ -291,7 +311,17 @@ var __extends = (this && this.__extends) || function (d, b) {
                 requestUrl: 'vvs.php',
                 translation: {
                     noData: 'No station info available'
-                }
+                },
+                delayWarnings: [{
+                        delay: -1,
+                        className: 'info'
+                    }, {
+                        delay: 1,
+                        className: 'warning'
+                    }, {
+                        delay: 3,
+                        className: 'danger'
+                    }]
             }, $this.data(), options);
             if (settings.blacklistDirection)
                 settings.blacklistDirection = new RegExp(settings.blacklistDirection);
@@ -351,16 +381,6 @@ var __extends = (this && this.__extends) || function (d, b) {
                                 $this.append("<h3>" + data.station.name + "</h3>");
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
-                            var rowClasses = [];
-                            switch (line.delaySign) {
-                                case 1:
-                                    rowClasses.push('danger');
-                                    break;
-                                case -1:
-                                    rowClasses.push('warning');
-                                    break;
-                            }
-                            var rowClass = rowClasses.join(' ');
                             var departureType = 'rel';
                             var departureValue = humanRelativeTime(line);
                             switch (settings.departureType) {
@@ -375,7 +395,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                                     }
                                     break;
                             }
-                            var template = "\n                            <tr class=\"" + rowClass + "\">\n                                <td>\n                                    <div class=\"overall-box\">\n                                        <div class=\"departure-box\">\n                                            <div class=\"line-symbol\" data-line=\"" + line.numberType + "\" data-line=\"" + line.number + "\">" + line.number + "</div>\n                                            <div class=\"direction\">" + line.direction + "</div>\n                                        </div>\n                                        <div class=\"time-box\">\n                                            <div class=\"label label-danger delay\" data-delay=\"" + line.delayType + "\">" + line.delayAbs + "</div>\n                                            <div class=\"departure\" data-departure-type=\"" + departureType + "\">" + departureValue + "</div>\n                                        </div>\n                                    </div>\n                                </td>\n                            </tr>";
+                            var template = "\n                            <tr class=\"" + line.delayClass + "\">\n                                <td>\n                                    <div class=\"overall-box\">\n                                        <div class=\"departure-box\">\n                                            <div class=\"line-symbol\" data-line=\"" + line.numberType + "\" data-line=\"" + line.number + "\">" + line.number + "</div>\n                                            <div class=\"direction\">" + line.direction + "</div>\n                                        </div>\n                                        <div class=\"time-box\">\n                                            <div class=\"label label-danger delay\" data-delay=\"" + line.delayType + "\">" + line.delayAbs + "</div>\n                                            <div class=\"departure\" data-departure-type=\"" + departureType + "\">" + departureValue + "</div>\n                                        </div>\n                                    </div>\n                                </td>\n                            </tr>";
                             tableEl.append(template);
                         });
                     }

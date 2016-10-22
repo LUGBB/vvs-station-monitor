@@ -59,14 +59,8 @@
   top: 0px;
   bottom: 0px;
   right: 0px;
-  background-color: white;
+  background-color: inherit;
   padding-left: 0.5rem;
-}
-.vvs-station tr.danger .time-box {
-  background-color: #f2dede;
-}
-.vvs-station tr.warning .time-box {
-  background-color: #fcf8e3;
 }
 .vvs-station tr td {
   white-space: nowrap;

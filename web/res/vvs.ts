@@ -49,6 +49,7 @@
                 whitelistDirection: false,
                 blacklistLine: false,
                 whitelistLine: false,
+                delayWarnings: []
             }, options);
 
             var request = this.requestStationDepartures(station);
@@ -76,6 +77,8 @@
                             line.delayType = this.transformDelayToType(line.delay);
                             line.delaySign = Math.sign(line.delay);
                             line.delayAbs  = Math.abs(line.delay);
+
+                            line.delayClass = this.calculateDelayClass(line, settings);
 
                             stops.push(line);
                         });
@@ -185,6 +188,30 @@
                     ret = "+";
                     break;
             }
+
+            return ret;
+        }
+
+        calculateDelayClass(line, settings) {
+            var ret = '';
+
+            $.each(settings.delayWarnings, (index, delayConf) => {
+                switch(Math.sign(delayConf.delay)) {
+                    case -1:
+                        if (line.delay <= delayConf.delay) {
+                            ret = delayConf.className;
+                        }
+                        break;
+
+                    case 1:
+                        if (line.delay >= delayConf.delay) {
+                            ret = delayConf.className;
+                        }
+                        break;
+                }
+
+
+            });
 
             return ret;
         }
@@ -330,7 +357,17 @@
                 requestUrl: 'vvs.php',
                 translation: {
                     noData: 'No station info available'
-                }
+                },
+                delayWarnings: [{
+                    delay: -1,
+                    className: 'info',
+                },{
+                    delay: 1,
+                    className: 'warning',
+                },{
+                    delay: 3,
+                    className: 'danger',
+                }]
             }, $this.data(), options);
 
             if (settings.blacklistDirection) settings.blacklistDirection = new RegExp(settings.blacklistDirection);
@@ -404,21 +441,6 @@
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
 
-                            var rowClasses = [];
-
-                            switch (line.delaySign) {
-                                case 1:
-                                    rowClasses.push('danger');
-                                    break;
-
-                                case -1:
-                                    rowClasses.push('warning');
-                                    break;
-                            }
-
-                            var rowClass = rowClasses.join(' ');
-
-
                             var departureType = 'rel';
                             var departureValue = humanRelativeTime(line);
 
@@ -438,7 +460,7 @@
 
 
                             var template = `
-                            <tr class="${rowClass}">
+                            <tr class="${line.delayClass}">
                                 <td>
                                     <div class="overall-box">
                                         <div class="departure-box">
