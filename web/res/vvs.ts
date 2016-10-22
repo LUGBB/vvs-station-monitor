@@ -385,10 +385,6 @@
             }
 
             $this.on('click', () => {
-               $this.toggleClass('hover');
-            });
-
-            $this.on('tab', () => {
                 $this.toggleClass('hover');
             });
 

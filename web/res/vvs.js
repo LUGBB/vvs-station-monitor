@@ -341,9 +341,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             $this.on('click', function () {
                 $this.toggleClass('hover');
             });
-            $this.on('tab', function () {
-                $this.toggleClass('hover');
-            });
             if (settings.enableTimeToggle) {
                 setInterval(function () {
                     $this.toggleClass('time-toggle');
