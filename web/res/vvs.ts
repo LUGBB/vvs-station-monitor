@@ -436,7 +436,7 @@
                             if (index === 0) {
                                 $this.append(`<h3>${data.station.name}</h3>`);
 
-                                if (settings.minDeparture >= 2) {
+                                if (settings.minDeparture >= 2 && settings.translation.minDepartureTitle) {
                                     var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
 
                                     var template = `<div class="departure-minimum-desc"><i>${minDepartureTitle}</i></div>`;
