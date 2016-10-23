@@ -377,9 +377,11 @@ var __extends = (this && this.__extends) || function (d, b) {
                         $.each(data.stops, function (index, line) {
                             if (index === 0) {
                                 $this.append("<h3>" + data.station.name + "</h3>");
-                                var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
-                                var template = "<div class=\"departure-minimum-desc\"><i>" + minDepartureTitle + "</i></div>";
-                                $this.append(template);
+                                if (settings.minDeparture >= 2) {
+                                    var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
+                                    var template = "<div class=\"departure-minimum-desc\"><i>" + minDepartureTitle + "</i></div>";
+                                    $this.append(template);
+                                }
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
                             var departureType = 'rel';

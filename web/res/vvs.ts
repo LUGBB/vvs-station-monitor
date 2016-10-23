@@ -436,10 +436,12 @@
                             if (index === 0) {
                                 $this.append(`<h3>${data.station.name}</h3>`);
 
-                                var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
+                                if (settings.minDeparture >= 2) {
+                                    var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
 
-                                var template = `<div class="departure-minimum-desc"><i>${minDepartureTitle}</i></div>`;
-                                $this.append(template);
+                                    var template = `<div class="departure-minimum-desc"><i>${minDepartureTitle}</i></div>`;
+                                    $this.append(template);
+                                }
 
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
