@@ -25,14 +25,22 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5000082" data-min-departure="5" data-max-departure="400" data-whitelist-direction="^(Untertürkheim|Hedelfingen)"></div>
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5000082" data-min-departure="5" data-max-departure="400" data-whitelist-direction="^(Untertürkheim|Hedelfingen)" data-enable-time-toggle="1"></div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5000082" data-min-departure="5" data-max-departure="400" data-blacklist-direction="^(Untertürkheim|Hedelfingen)"></div>
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5000082" data-min-departure="5" data-max-departure="400" data-blacklist-direction="^(Untertürkheim|Hedelfingen)" data-enable-time-toggle="1"></div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006085" data-min-departure="15" data-max-departure="400" data-blacklist-line="^(U4|U9[0-9]+)$" data-enable-time-toggle="1"></div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006118" data-min-departure="15" data-max-departure="400" data-enable-time-toggle="1"></div>
         </div>
     </div>
 </div>
+
+<div id="clock" class="alert alert-info"></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -45,6 +53,8 @@
                 noData: 'Keine Haltestellen Infos'
             }
         });
+
+        $("#clock").clock();
 
         // reload every 60 minutes
         setTimeout(function() {
