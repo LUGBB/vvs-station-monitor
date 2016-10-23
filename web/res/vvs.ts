@@ -454,6 +454,12 @@
                                     break;
                             }
 
+                            // Hide delay if more then 9999 (internal code?)
+                            if (line.delayAbs >= 9999) {
+                                line.delayClass = '';
+                                line.delayType = '';
+                                line.delayAbs = '';
+                            }
 
                             var template = `
                             <tr class="${line.delayClass}">

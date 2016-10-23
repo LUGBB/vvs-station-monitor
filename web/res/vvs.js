@@ -392,6 +392,12 @@ var __extends = (this && this.__extends) || function (d, b) {
                                     }
                                     break;
                             }
+                            // Hide delay if more then 9999 (internal code?)
+                            if (line.delayAbs >= 9999) {
+                                line.delayClass = '';
+                                line.delayType = '';
+                                line.delayAbs = '';
+                            }
                             var template = "\n                            <tr class=\"" + line.delayClass + "\">\n                                <td>\n                                    <div class=\"overall-box\">\n                                        <div class=\"departure-box\">\n                                            <div class=\"line-symbol\" data-line=\"" + line.numberType + "\" data-line=\"" + line.number + "\">" + line.number + "</div>\n                                            <div class=\"direction\">" + line.direction + "</div>\n                                        </div>\n                                        <div class=\"time-box\">\n                                            <div class=\"label label-danger delay\" data-delay=\"" + line.delayType + "\">" + line.delayAbs + "</div>\n                                            <div class=\"departure\" data-departure-type=\"" + departureType + "\">" + departureValue + "</div>\n                                        </div>\n                                    </div>\n                                </td>\n                            </tr>";
                             tableEl.append(template);
                         });
