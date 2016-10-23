@@ -232,7 +232,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                     lastUptimeTime = false;
                     ret = false;
                 }
-                if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60)) {
+                if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= this.cacheTime)) {
                     promise = new Promise(function (resolve, reject) {
                         resolve(ret);
                     });
@@ -311,7 +311,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 requestUrl: 'vvs.php',
                 translation: {
                     noData: 'Keine Abfahrtszeiten vorhanden',
-                    minDepartureTitle: 'Abfahrt ab {minutes} Minuten'
+                    minDepartureTitle: 'Abfahrt ab {minutes} min'
                 },
                 delayWarnings: [{
                         delay: -1,
@@ -377,10 +377,10 @@ var __extends = (this && this.__extends) || function (d, b) {
                         $.each(data.stops, function (index, line) {
                             if (index === 0) {
                                 $this.append("<h3>" + data.station.name + "</h3>");
-                                tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                                 var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
-                                var template = "\n                                <tr class=\"departure-minimum-desc\">\n                                    <td>\n                                        <i>" + minDepartureTitle + "</i>\n                                    </td>\n                                </tr>";
-                                tableEl.append(template);
+                                var template = "<div class=\"departure-minimum-desc\"><i>" + minDepartureTitle + "</i></div>";
+                                $this.append(template);
+                                tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
                             var departureType = 'rel';
                             var departureValue = humanRelativeTime(line);
@@ -439,6 +439,5 @@ var __extends = (this && this.__extends) || function (d, b) {
             callback();
         });
     };
-    ;
 })();
 //# sourceMappingURL=vvs.js.map

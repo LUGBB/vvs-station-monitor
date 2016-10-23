@@ -76,22 +76,22 @@
 .vvs-station tr td {
   white-space: nowrap;
 }
-.vvs-station tr.departure-minimum-desc {
+.vvs-station .departure-minimum-desc {
   font-size: 1.5rem;
   text-align: center;
 }
-.vvs-station tr.departure-minimum-desc i {
+.vvs-station .departure-minimum-desc i {
   display: block;
 }
-.vvs-station tr.departure-minimum-desc i::before,
-.vvs-station tr.departure-minimum-desc i::after {
+.vvs-station .departure-minimum-desc i::before,
+.vvs-station .departure-minimum-desc i::after {
   font-style: normal;
   content: "⇩";
 }
-.vvs-station tr.departure-minimum-desc i::before {
+.vvs-station .departure-minimum-desc i::before {
   padding-right: 1rem;
 }
-.vvs-station tr.departure-minimum-desc i::after {
+.vvs-station .departure-minimum-desc i::after {
   padding-left: 1rem;
 }
 .vvs-station div.direction {

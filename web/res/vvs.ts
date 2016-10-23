@@ -6,7 +6,7 @@
     }
 
     class VVS {
-        requestUrl: 'vvs.php'
+        requestUrl: 'vvs.php';
 
         request(data) {
             return $.ajax( {
@@ -273,7 +273,7 @@
                     ret = false;
                 }
 
-                if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= 60)) {
+                if (lastUptimeTime && ret && (currentTime - lastUptimeTime <= this.cacheTime)) {
                     promise = new Promise((resolve, reject) => {
                         resolve(ret);
                     });
@@ -357,17 +357,17 @@
                 requestUrl: 'vvs.php',
                 translation: {
                     noData: 'Keine Abfahrtszeiten vorhanden',
-                    minDepartureTitle: 'Abfahrt ab {minutes} Minuten',
+                    minDepartureTitle: 'Abfahrt ab {minutes} min',
                 },
                 delayWarnings: [{
                     delay: -1,
-                    className: 'info',
+                    className: 'info'
                 },{
                     delay: 1,
-                    className: 'warning',
+                    className: 'warning'
                 },{
                     delay: 3,
-                    className: 'danger',
+                    className: 'danger'
                 }]
             }, $this.data(), options);
 
@@ -435,18 +435,13 @@
                         $.each(data.stops, (index, line) => {
                             if (index === 0) {
                                 $this.append(`<h3>${data.station.name}</h3>`);
-                                tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
 
                                 var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
 
-                                var template = `
-                                <tr class="departure-minimum-desc">
-                                    <td>
-                                        <i>${minDepartureTitle}</i>
-                                    </td>
-                                </tr>`
+                                var template = `<div class="departure-minimum-desc"><i>${minDepartureTitle}</i></div>`;
+                                $this.append(template);
 
-                                tableEl.append(template);
+                                tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
                             }
 
                             var departureType = 'rel';
@@ -530,7 +525,6 @@
             setInterval(callback, 900);
             callback();
         });
-    });
-
+    };
 
 })();
