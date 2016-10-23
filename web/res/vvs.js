@@ -310,7 +310,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                 departureType: 'relative',
                 requestUrl: 'vvs.php',
                 translation: {
-                    noData: 'No station info available'
+                    noData: 'Keine Abfahrtszeiten vorhanden',
+                    minDepartureTitle: 'Abfahrt ab {minutes} Minuten'
                 },
                 delayWarnings: [{
                         delay: -1,
@@ -377,6 +378,9 @@ var __extends = (this && this.__extends) || function (d, b) {
                             if (index === 0) {
                                 $this.append("<h3>" + data.station.name + "</h3>");
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
+                                var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
+                                var template = "\n                                <tr class=\"departure-minimum-desc\">\n                                    <td>\n                                        <i>" + minDepartureTitle + "</i>\n                                    </td>\n                                </tr>";
+                                tableEl.append(template);
                             }
                             var departureType = 'rel';
                             var departureValue = humanRelativeTime(line);

@@ -356,7 +356,8 @@
                 departureType: 'relative',
                 requestUrl: 'vvs.php',
                 translation: {
-                    noData: 'No station info available'
+                    noData: 'Keine Abfahrtszeiten vorhanden',
+                    minDepartureTitle: 'Abfahrt ab {minutes} Minuten',
                 },
                 delayWarnings: [{
                     delay: -1,
@@ -435,6 +436,17 @@
                             if (index === 0) {
                                 $this.append(`<h3>${data.station.name}</h3>`);
                                 tableEl = $this.append('<table class="table table-condensed"><tbody></tbody></table>').find('table tbody');
+
+                                var minDepartureTitle = settings.translation.minDepartureTitle.replace(/{minutes}/, settings.minDeparture);
+
+                                var template = `
+                                <tr class="departure-minimum-desc">
+                                    <td>
+                                        <i>${minDepartureTitle}</i>
+                                    </td>
+                                </tr>`
+
+                                tableEl.append(template);
                             }
 
                             var departureType = 'rel';
