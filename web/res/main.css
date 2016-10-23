@@ -60,6 +60,7 @@
   color: red;
   background-color: white;
   border-color: black;
+  font-style: italic;
 }
 .vvs-station .overall-box {
   position: relative;
