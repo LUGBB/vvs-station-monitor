@@ -7,7 +7,7 @@
 
     <!--
         VVS Station Monitor
-        Github: https://github.com/mblaschke/vvs-station-monitor
+        Github: https://github.com/LUGBB/vvs-station-monitor
     -->
 
     <title>VVS Haltestellen-Monitor</title>
@@ -36,11 +36,13 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="res/vvs.js"></script>
+<script src="res/main.js"></script>
 <script>
     jQuery( document ).ready(function($) {
         $(".vvs-station").vvsStation({
-            loadingIndicator: '<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>',
+            // custom settings here
+            // -> see web/src/typescript/class.vvs.settings.ts
+            // -> see web/src/typescript/jquery.vvsstation.settings.ts
             departureType: 'absolute'
         });
 

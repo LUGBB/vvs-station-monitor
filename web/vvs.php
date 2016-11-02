@@ -24,7 +24,7 @@ if (!empty($url)) {
     ];
 
     $context = stream_context_create($contextOptions);
-    $content =  @file_get_contents($url, false, $context);
+    $content = @file_get_contents($url, false, $context);
 
     if (!empty($content)) {
         echo $content;

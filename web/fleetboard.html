@@ -8,7 +8,7 @@
 
     <!--
         VVS Station Monitor
-        Github: https://github.com/mblaschke/vvs-station-monitor
+        Github: https://github.com/LUGBB/vvs-station-monitor
     -->
 
     <title>VVS Haltestellen-Monitor</title>
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="res/main.css">
     <style type="text/css">
         body {
-            font-size: 2rem;
+            font-size: 2rem;m
         }
     </style>
 </head>
@@ -27,16 +27,16 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5006002" data-blacklist-line="^[0-9]+$" data-min-departure="10" data-max-departure="200" data-enable-time-toggle="1"></div>
+            <div class="vvs-station" data-station="5006002" data-blacklist-line="^[0-9]+$" data-min-departure="10" data-max-departure="200"></div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5002582" data-enable-time-toggle="1"></div>
+            <div class="vvs-station" data-station="5002582"></div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5002599" data-blacklist-direction="^Dürrlewang$" data-blacklist-line="^[0-9]+$" data-enable-time-toggle="1"></div>
+            <div class="vvs-station" data-station="5002599" data-blacklist-direction="^Dürrlewang$" data-blacklist-line="^[0-9]+$"></div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5000355" data-blacklist-direction="^(Dürrlewang|Vaihingen)$" data-min-departure="5" data-enable-time-toggle="1"></div>
+            <div class="vvs-station" data-station="5000355" data-blacklist-direction="^(Dürrlewang|Vaihingen)$" data-min-departure="5"></div>
         </div>
     </div>
 </div>
@@ -45,11 +45,14 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="res/vvs.js"></script>
+<script src="res/main.js"></script>
 <script>
     jQuery( document ).ready(function($) {
         $(".vvs-station").vvsStation({
-            loadingIndicator: '<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>'
+            // custom settings here
+            // -> see web/src/typescript/class.vvs.settings.ts
+            // -> see web/src/typescript/jquery.vvsstation.settings.ts
+            timeToggle: 10
         });
 
         $("#clock").clock();

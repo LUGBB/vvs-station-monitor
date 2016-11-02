@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outFile": "main.js",
+        "sourceMap": true,
+        "target": "es6",
+        "allowJs": true
+    },
+    "include": [
+        "web/src/typescript/*.ts",
+        "web/src/libraries/*.js"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
