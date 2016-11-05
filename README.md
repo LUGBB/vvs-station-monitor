@@ -19,6 +19,25 @@ infomation monitors.
 - [jweiland.net](https://stationmonitor.lugbb.org/jweiland.html)
 - [Shackspace](https://stationmonitor.lugbb.org/shackspace.html)
 
+## Features
+
+- Auto update
+- Blacklist/Whitelist for line and direction (regular expressions)
+- Based on bootstrap (easier customization, responsive layout)
+- Customizable font size (set it via css on the html element, see examples)
+- Show time in relative (xxx min) or absolute (14:21) or both (switching based on time setting)
+- Local caching (using localStorage, some rotation browser-plugin also reloads the page so this will prevent unnecessary ajax requests)
+- Avoid duplicate ajax requests
+- Clock (optional)
+- Easy station configuration (by using `data-` attributes)
+- Template based (mustache)
+- Written in TypeScript
+- [OpenSource license (MIT)](LICENSE)
+
+For anyone wo don't want to use bootstrap:
+It isn't required. Just remove the bootstrap CSS and add or write your own CSS.
+Bootstrap was a solution to get a nice and responsive result with less work.
+
 ## Configuration
 
 Most configuration can be set in the HTML eg. custom filtering and 
