@@ -85,4 +85,4 @@ There is also support for a clock in the right bottom edge, eg:
 
 ## Special thanks
 
-Special thanks to the guys from [OK Lab Stuttgart](http://codefor.de/stuttgart/) for the [VVS Api](http://codefor.de/projekte/2015-06-09-stgt-efa-meta-api)
+Special thanks to the guys from [OK Lab Stuttgart](http://codefor.de/stuttgart/) for the [VVS Api](http://codefor.de/projekte/2015-06-09-stgt-efa-meta-api) ([GitHub project](https://github.com/opendata-stuttgart/metaEFA))
