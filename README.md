@@ -26,6 +26,7 @@ infomation monitors.
 - Based on bootstrap (easier customization, responsive layout)
 - Customizable font size (set it via css on the html element, see examples)
 - Show time in relative (xxx min) or absolute (14:21) or both (switching based on time setting)
+- Show relative and absolute times on mouseover
 - Local caching (using localStorage, some rotation browser-plugin also reloads the page so this will prevent unnecessary ajax requests)
 - Avoid duplicate ajax requests
 - Clock (optional)
