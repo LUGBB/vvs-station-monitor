@@ -52,6 +52,8 @@ All jQuery plugin configuration options for `vvsStation` can be easily configure
 
 ```
 
+See [jquery.vvsstation.settings.ts](web/src/typescript/jquery.vvsstation.settings.ts) and [class.vvs.settings.ts](web/src/typescript/class.vvs.settings.ts)
+for all available settings and their defaults.
 
 Configuration            | HTML attribute                  | Description
 -------------------------|---------------------------------|--------------------------------------------------------------------------------------
@@ -65,8 +67,14 @@ whitelistDirection       | data-whitelist-direction        | Whitelist (regexp) 
 blacklistLine            | data-blacklist-line             | Blacklist (regexp) for Line (eg. S1, 82, R123)
 whitelistLine            | data-whitelist-line             | Whitelist (regexp) for Line (eg. S1, 82, R123)
 maxEntries               | data-max-entries                | Max numbers of departures which will be shown
-toggleTime               | data-toggle-time                | Seconds between time toggle (see enableTimeToggle)
-enableTimeToggle         | data-enable-time-toggle         | Toggle between absolute and relative time
+timeToggle               | data-time-toggle                | Seconds between time toggle
+templateMain             | data-template-main              | Main wrapper template
+templateTitle            | data-template-title             | Template for only the station title
+templateTimetable        | data-template-timetable         | Template for the whole time table (with mustache loop)
+templateNoData           | data-template-no-data           | Template if there are no departures
+delayClasses             | *not available*                 | Definition of coloring (by using css classes) of the departure lines based on delay time
+translations             | *not available*                 | Object with all translations
+
 
 ## Clock
 
@@ -81,6 +89,8 @@ There is also support for a clock in the right bottom edge, eg:
 </script>
 
 ```
+
+For positioning just add `bottom`, `top`, `left` and `right` to the div clock element.
 
 
 ## Special thanks
