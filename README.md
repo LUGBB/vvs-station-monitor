@@ -62,7 +62,7 @@ web page.
 It's not possible to access https://efa-api.asw.io/ directly via 
 JavaScript (AJAX) so we currently need a local proxy.
 
-## Customizing
+## Configuration
 
 All jQuery plugin configuration options for `vvsStation` can be easily configured as HTML attributes for each instance:
 
@@ -111,6 +111,20 @@ There is also support for a clock in the right bottom edge, eg:
 
 For positioning just add `bottom`, `top`, `left` and `right` to the div clock element.
 
+
+## Customization
+
+1. You need to install the npm modules:
+```
+npm install
+```
+
+2. Run the gulp watch
+```
+gulp watch
+```
+
+3. Customize your stuff and run the application
 
 ## Special thanks
 
