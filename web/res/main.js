@@ -771,7 +771,7 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
             noData: 'Keine Abfahrtszeiten vorhanden',
             minute: 'min',
             from: 'ab',
-            departureCanceld: '---'
+            departureCanceld: 'Zug fällt aus'
         };
         this.templateMain = `
             <h3>{{title}}<i class="departure-minimum-desc">{{departureTitle}}</i></h3>
@@ -811,10 +811,10 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
                 className: 'danger'
             }, {
                 delay: 9999,
-                className: 'danger blink canceled'
+                className: 'danger canceled'
             }, {
                 delay: -9999,
-                className: 'danger blink canceled'
+                className: 'danger canceled'
             }];
     }
 }
@@ -892,7 +892,7 @@ $.fn.vvsStation = function (options) {
                 departure: {
                     relative: () => {
                         if (line.delay === 9999 || line.delay === -9999) {
-                            return settings.translations.departureCanceld;
+                            return `<span class="marquee"><span>${settings.translations.departureCanceld}</span></span>`;
                         }
                         if (settings.departureType === 'intelligent' && line.departure >= settings.intelligentTimeThreshold) {
                             return line.departureTime;
@@ -903,7 +903,7 @@ $.fn.vvsStation = function (options) {
                     },
                     absolute: () => {
                         if (line.delay === 9999 || line.delay === -9999) {
-                            return settings.translations.departureCanceld;
+                            return `<span class="marquee"><span>${settings.translations.departureCanceld}</span></span>`;
                         }
                         return line.departureTime;
                     }

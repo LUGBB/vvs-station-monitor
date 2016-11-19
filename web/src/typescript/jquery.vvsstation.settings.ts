@@ -67,7 +67,7 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
         noData: 'Keine Abfahrtszeiten vorhanden',
         minute: 'min',
         from:   'ab',
-        departureCanceld: '---'
+        departureCanceld: 'Zug fällt aus'
     };
 
     /**
@@ -135,9 +135,9 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
         className: 'danger'
     },{
         delay: 9999,
-        className: 'danger blink canceled'
+        className: 'danger canceled'
     },{
         delay: -9999,
-        className: 'danger blink canceled'
+        className: 'danger canceled'
     }];
 }
