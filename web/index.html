@@ -17,39 +17,80 @@
     <link rel="stylesheet" href="res/main.css">
     <style type="text/css">
         body {
-            font-size: 2rem;
+            font-size: 1.8rem;
+        }
+        .container {
+            padding-top: 1em;
+            padding-bottom: 2em;
         }
     </style>
 </head>
 <body>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5006118" data-blacklist-line="^[0-9]+$" data-min-departure="15" data-max-departure="200"></div>
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5006056" data-min-departure="5" data-max-departure="200"></div>
+<div class="container">
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1>VVS Haltestellen-Monitor</h1>
+            <p>
+                webbasierte Anzeige für Haltestellen im VVS-Gebiet (Stuttgart) für Team- und Kundenmonitore und mehr<br>
+                <small>entwickelt und veröffentlicht von der <a href="//www.lugbb.org">Linux User Group Böblingen/Sindelfingen</a> unter einer OpenSource-Lizenz (MIT)</small>
+            </p>
+            <p style="text-align:right;"><a class="btn btn-primary btn-lg" href="//github.com/LUGBB/vvs-station-monitor" role="button">zum GitHub Projekt &raquo;</a></p>
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Beispiele</h2>
+            <p>
+                <ul>
+                    <li><a href="stuttgart.html">Stuttgart Innenstadt</a></li>
+                    <li><a href="shackspace.html">Shackspace</a></li>
+                    <li><a href="jweiland.html">jweiland.net</a></li>
+                </ul>
+            </p>
+        </div>
+
+
+        <div class="col-md-4" style="font-size: 0.8em;">
+            <h3>Eigene Anzeigen</h3>
+            <p>
+                Du möchtest eine eigene Ansicht für dich oder deine Firma haben?
+                <br><br>
+                Fork einfach unseren
+                <a href="//github.com/LUGBB/vvs-station-monitor">VVS Haltestellen-Monitor auf GitHub</a> oder
+                stell einen Pull-Request ein.
+                <br><br>
+                Die Anzeigen sind frei konfigurierbar und anpassbar. Das Styling basiert auf Bootstrap, kann aber
+                komplett ersetzt werden.<br>
+                Mehr zur Konfiguration findest du
+                <a href="//github.com/LUGBB/vvs-station-monitor/blob/master/README.md">in der README.md auf GitHub.</a>
+            </p>
+        </div>
+
+
+        <div class="col-md-4" style="font-size: 0.8em;">
+            <h3>Vorraussetungen</h3>
+            <ul>
+                <li>PHP (API-Proxy)</li>
+                <li>Moderner Browser<br><small>(Edge, Firefox, Chrome...)</small></li>
+            </ul>
+
+            <h3>Technologien</h3>
+            <ul>
+                <li>HTML5</li>
+                <li>CSS3 (+Animationen)</li>
+                <li>Bootstrap (optional)</li>
+                <li>TypeScript</li>
+                <li>mustache.js Template Engine</li>
+                <li>Gulp</li>
+            </ul>
+        </div>
+    </div>
+
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="res/main.js"></script>
-<script>
-    jQuery( document ).ready(function($) {
-        $(".vvs-station").vvsStation({
-            // custom settings here
-            // -> see web/src/typescript/class.vvs.settings.ts
-            // -> see web/src/typescript/jquery.vvsstation.settings.ts
-        });
-
-        // reload every 60 minutes
-        setTimeout(function() {
-            location.reload();
-        }, 60 * 60 * 1000);
-    });
-</script>
 </body>
 </html>
