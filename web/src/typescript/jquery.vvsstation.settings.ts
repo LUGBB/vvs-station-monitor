@@ -66,7 +66,8 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
     translations: any = {
         noData: 'Keine Abfahrtszeiten vorhanden',
         minute: 'min',
-        from:   'ab'
+        from:   'ab',
+        departureCanceld: '---'
     };
 
     /**
@@ -132,5 +133,11 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
     },{
         delay: 3,
         className: 'danger'
+    },{
+        delay: 9999,
+        className: 'danger blink canceled'
+    },{
+        delay: -9999,
+        className: 'danger blink canceled'
     }];
 }

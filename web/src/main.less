@@ -289,6 +289,12 @@
                 content: ')';
             }
 
+            .canceled {
+                .time.relative {
+                    display: none !important;
+                }
+            }
+
         }
     }
 
@@ -310,6 +316,12 @@
         }
     }
 
+    .canceled {
+        div.delay {
+            display: none !important;
+        }
+    }
+
     // fade
     @-webkit-keyframes fade {
         from {opacity: 0}
@@ -318,6 +330,20 @@
          from {opacity: 0}
          to {opacity: 1}
      }
+
+    @keyframes blink {
+        20% { color: red; }
+        100% { color: black; }
+    }
+    @-webkit-keyframes blink {
+        20% { color: red; }
+        100% { color: black; }
+    }
+    .blink {
+        -webkit-animation: blink 1s linear infinite;
+        -moz-animation: blink 1s linear infinite;
+        animation: blink 1s linear infinite;
+    }
 
 }
 

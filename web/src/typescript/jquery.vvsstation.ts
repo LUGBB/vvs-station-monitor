@@ -83,13 +83,23 @@ $.fn.vvsStation = function(options: any) {
                 },
                 departure: {
                     relative: () => {
+                        if (line.delay === 9999 || line.delay === -9999) {
+                            return settings.translations.departureCanceld;
+                        }
+
                         if (settings.departureType === 'intelligent' && line.departure >= settings.intelligentTimeThreshold) {
                             return line.departureTime;
                         } else {
                             return humanRelativeTime(line);
                         }
                     },
-                    absolute: line.departureTime
+                    absolute: () => {
+                        if (line.delay === 9999 || line.delay === -9999) {
+                            return settings.translations.departureCanceld;
+                        }
+
+                        return line.departureTime;
+                    }
                 }
 
             };

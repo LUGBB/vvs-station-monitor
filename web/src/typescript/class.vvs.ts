@@ -113,16 +113,12 @@ class VVS {
                             return;
                         }
 
-                        // filter invalid delay (maybe "sonderzug"?)
-                        if (line.delay >= 9999) {
-                            line.delay = 0;
-                        }
-
                         var departureTime = line.departureTime;
 
                         line.departureTime = this.calculateDepatureTime(departureTime);
                         line.departure = this.calculateDepatureTimeRel(departureTime, currentTimestamp);
                         line.numberType = this.transformLineNumberToType(line.number);
+                        line.delay = parseInt(line.delay);
                         line.delayType = this.transformDelayToType(line.delay);
                         line.delaySign = Math.sign(line.delay);
                         line.delayAbs = Math.abs(line.delay);
@@ -258,6 +254,10 @@ class VVS {
 
             case 1:
                 ret = "+";
+                break;
+
+            case 1:
+                ret = "cancled";
                 break;
         }
 

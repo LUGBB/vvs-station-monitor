@@ -411,7 +411,7 @@ class Utility {
         return new Date(`${year}/${month}/${day} ${hour}:${minute}:${second}`);
     }
     static isTouchDevice() {
-        return ('ontouchstart' in window
+        return !!('ontouchstart' in window
             || navigator.maxTouchPoints);
     }
     static logMessage(message, color = '#000000') {
@@ -506,13 +506,11 @@ class VVS {
                         if (line.direction === 'Zug endet hier') {
                             return;
                         }
-                        if (line.delay >= 9999) {
-                            line.delay = 0;
-                        }
                         var departureTime = line.departureTime;
                         line.departureTime = this.calculateDepatureTime(departureTime);
                         line.departure = this.calculateDepatureTimeRel(departureTime, currentTimestamp);
                         line.numberType = this.transformLineNumberToType(line.number);
+                        line.delay = parseInt(line.delay);
                         line.delayType = this.transformDelayToType(line.delay);
                         line.delaySign = Math.sign(line.delay);
                         line.delayAbs = Math.abs(line.delay);
@@ -591,6 +589,9 @@ class VVS {
                 break;
             case 1:
                 ret = "+";
+                break;
+            case 1:
+                ret = "cancled";
                 break;
         }
         return ret;
@@ -757,7 +758,8 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
         this.translations = {
             noData: 'Keine Abfahrtszeiten vorhanden',
             minute: 'min',
-            from: 'ab'
+            from: 'ab',
+            departureCanceld: '---'
         };
         this.templateMain = `
             <h3>{{title}}<i class="departure-minimum-desc">{{departureTitle}}</i></h3>
@@ -795,6 +797,12 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
             }, {
                 delay: 3,
                 className: 'danger'
+            }, {
+                delay: 9999,
+                className: 'danger blink canceled'
+            }, {
+                delay: -9999,
+                className: 'danger blink canceled'
             }];
     }
 }
@@ -871,6 +879,9 @@ $.fn.vvsStation = function (options) {
                 },
                 departure: {
                     relative: () => {
+                        if (line.delay === 9999 || line.delay === -9999) {
+                            return settings.translations.departureCanceld;
+                        }
                         if (settings.departureType === 'intelligent' && line.departure >= settings.intelligentTimeThreshold) {
                             return line.departureTime;
                         }
@@ -878,7 +889,12 @@ $.fn.vvsStation = function (options) {
                             return humanRelativeTime(line);
                         }
                     },
-                    absolute: line.departureTime
+                    absolute: () => {
+                        if (line.delay === 9999 || line.delay === -9999) {
+                            return settings.translations.departureCanceld;
+                        }
+                        return line.departureTime;
+                    }
                 }
             };
         };
