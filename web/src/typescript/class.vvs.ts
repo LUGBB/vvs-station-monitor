@@ -1,5 +1,6 @@
 /// <reference path="class.utility.ts" />
 /// <reference path="class.vvs.settings.ts" />
+/// <reference path="class.vvs-timetable-entry.ts" />
 'use strict';
 
 class VVS {
@@ -114,6 +115,10 @@ class VVS {
                         }
 
                         var departureTime = line.departureTime;
+                        delete line.departureTime;
+
+                        line = new VVSTimetableEntry(line);
+
 
                         line.departureTime = this.calculateDepatureTime(departureTime);
                         line.departure = this.calculateDepatureTimeRel(departureTime, currentTimestamp);
@@ -122,7 +127,6 @@ class VVS {
                         line.delayType = this.transformDelayToType(line.delay);
                         line.delaySign = Math.sign(line.delay);
                         line.delayAbs = Math.abs(line.delay);
-
                         line.delayClass = this.calculateDelayClass(line);
 
                         stops.push(line);

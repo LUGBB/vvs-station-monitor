@@ -449,6 +449,16 @@ class VVSDefaultSettings {
     }
 }
 'use strict';
+class VVSTimetableEntry {
+    constructor(data) {
+        if (data) {
+            for (var i in data) {
+                this[i] = data[i];
+            }
+        }
+    }
+}
+'use strict';
 class VVS {
     constructor(station, options) {
         this.requestUrl = 'vvs.php';
@@ -507,6 +517,8 @@ class VVS {
                             return;
                         }
                         var departureTime = line.departureTime;
+                        delete line.departureTime;
+                        line = new VVSTimetableEntry(line);
                         line.departureTime = this.calculateDepatureTime(departureTime);
                         line.departure = this.calculateDepatureTimeRel(departureTime, currentTimestamp);
                         line.numberType = this.transformLineNumberToType(line.number);
