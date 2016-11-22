@@ -36,6 +36,8 @@
     </div>
 </div>
 
+<div id="clock" class="alert alert-info"></div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="res/main.js"></script>
 <script>
@@ -46,6 +48,8 @@
             // -> see web/src/typescript/jquery.vvsstation.settings.ts
             timeToggle: 10
         });
+
+        $("#clock").clock();
 
         // reload every 60 minutes
         setTimeout(function() {
