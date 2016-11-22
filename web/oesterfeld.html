@@ -24,17 +24,14 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5007100" data-whitelist-line="^(S|R)[0-9]+$" data-whitelist-direction="(Herrenberg)" data-template-title="S-Bahn ⇢ Herrenberg"></div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006027" data-min-departure="5" data-max-departure="400" data-whitelist-direction="(Flughafen|Filderstadt|Bernhausen|Rohr|Vaihingen|Herrenberg|Horb|Freudenstadt)" data-template-title="{{stationName}} ⇢ Vaihingen"></div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5007100" data-whitelist-line="^(S|R)[0-9]+$" data-whitelist-direction="(Vaihingen|Hauptbahnhof|Stuttgart|Renningen|Kirchheim|Plochingen)" data-template-title="S-Bahn ⇢ Stuttgart"></div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006027" data-min-departure="5" data-max-departure="400" data-blacklist-direction="(Filderstadt|Bernhausen|Rohr|Vaihingen|Herrenberg|Horb|Freudenstadt)" data-template-title="{{stationName}} ⇢ Hauptbahnhof"></div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5007100" data-whitelist-line="^R[0-9]+$" data-template-title="Schönbuchbahn"></div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <div class="vvs-station" data-station="5007100" data-whitelist-line="^(RT)?[0-9]+$" data-template-title="Busse"></div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5002602" data-min-departure="5" data-max-departure="400"></div>
         </div>
     </div>
 </div>
@@ -47,7 +44,7 @@
             // custom settings here
             // -> see web/src/typescript/class.vvs.settings.ts
             // -> see web/src/typescript/jquery.vvsstation.settings.ts
-            departureType: 'absolute'
+            timeToggle: 10
         });
 
         // reload every 60 minutes
