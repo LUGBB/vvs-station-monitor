@@ -117,19 +117,20 @@
             background-color: #288d20;
         }
 
-        // Bus
-        &[data-line^=B],
-        &[data-line^=N],
-        &[data-line^=X],
-        &[data-line^=E] {
-            color: white;
-            background-color: #da0003;
-        }
-
         // Regionalbahn (R,RB,RE,RT)
         &[data-line^=R] {
             color: white;
             background-color: #707273;
+        }
+
+        // Bus
+        &[data-line^=B],
+        &[data-line^=N],
+        &[data-line^=X],
+        &[data-line^=E],
+        &[data-line^=RT] {
+            color: white;
+            background-color: #da0003;
         }
 
         // IC, ICE, IRE
