@@ -119,7 +119,6 @@ class VVS {
 
                         line = new VVSTimetableEntry(line);
 
-
                         line.departureTime = this.calculateDepatureTime(departureTime);
                         line.departure = this.calculateDepatureTimeRel(departureTime, currentTimestamp);
                         line.numberType = this.transformLineNumberToType(line.number);
