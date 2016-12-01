@@ -1,0 +1,76 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!--
+        VVS Station Monitor
+        Github: https://github.com/LUGBB/vvs-station-monitor
+    -->
+
+    <title>VVS Haltestellen-Monitor</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="res/main.css">
+    <style type="text/css">
+        body {
+            font-size: 2rem;
+        }
+        @media (min-width: 1400px) {
+            body {
+                font-size: 3rem;
+            }
+            .vvs-station div.delay {
+                font-size: 2rem;
+            }
+            .vvs-station h3 {
+                font-size: 4rem;
+            }
+            #clock {
+                font-size: 6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006002" data-max-departure="400" data-whitelist-line="^S[0-9]+" data-whitelist-direction="(Flughafen|Filderstadt|Bernhausen|Rohr|Vaihingen|Böblingen|Herrenberg|Horb|Freudenstadt)" data-template-title="{{stationName}} ⇢ Rohr"></div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006002" data-max-departure="400" data-whitelist-line="^S[0-9]+" data-blacklist-direction="(Flughafen|Filderstadt|Bernhausen|Rohr|Vaihingen|Böblingen|Herrenberg|Horb|Freudenstadt)" data-template-title="{{stationName}} ⇢ Hbf"></div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006002" data-blacklist-line="^S[0-9]+"></div>
+        </div>
+    </div>
+</div>
+
+<div id="clock" class="alert alert-info"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="res/main.js"></script>
+<script>
+    jQuery( document ).ready(function($) {
+        $(".vvs-station").vvsStation({
+            // custom settings here
+            // -> see web/src/typescript/class.vvs.settings.ts
+            // -> see web/src/typescript/jquery.vvsstation.settings.ts
+            timeToggle: 10
+        });
+
+        $("#clock").clock();
+
+        // reload every 60 minutes
+        setTimeout(function() {
+            location.reload();
+        }, 60 * 60 * 1000);
+    });
+</script>
+</body>
+</html>
