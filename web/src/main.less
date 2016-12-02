@@ -280,31 +280,6 @@
                 font-size: 80%;
             }
         }
-
-
-        &.hover,
-        &:hover {
-            .time.absolute,
-            .time.relative {
-                font-size: 1.5rem !important;
-                display: inline-block !important;
-            }
-
-            .time.relative::before {
-                content: '(';
-            }
-
-            .time.relative::after {
-                content: ')';
-            }
-
-            .canceled {
-                .time.relative {
-                    display: none !important;
-                }
-            }
-
-        }
     }
 
     div.delay {
@@ -460,7 +435,62 @@
     }
 }
 
+@media (min-width: 991px) {
+    .vvs-station {
+        &.hover,
+        &:hover {
+            .time.absolute,
+            .time.relative {
+                font-size: 1.5rem !important;
+                display: inline-block !important;
+            }
+
+            .time.relative::before {
+                content: '(';
+            }
+
+            .time.relative::after {
+                content: ')';
+            }
+
+            .canceled {
+                .time.relative {
+                    display: none !important;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    // tablet/smartphone
+
+    .vvs-station {
+
+        .time.absolute,
+        .time.relative {
+            display: inline-block !important;
+        }
+
+        .time.relative::before {
+            content: '(';
+        }
+
+        .time.relative::after {
+            content: ')';
+        }
+
+        .canceled {
+            .time.relative {
+                display: none !important;
+            }
+        }
+    }
+}
+
 @media (max-width: 768px) {
+    // smartphone
+
     #clock {
         display: none;
     }
