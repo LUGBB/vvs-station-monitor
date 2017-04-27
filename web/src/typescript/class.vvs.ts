@@ -110,6 +110,10 @@ class VVS {
                             return;
                         }
 
+                        if (line.direction === 'Betriebsfahrt') {
+                            return;
+                        }
+
                         var departureTime = line.departureTime;
                         delete line.departureTime;
 

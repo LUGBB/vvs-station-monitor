@@ -512,6 +512,9 @@ class VVS {
                         if (line.direction === 'Zug endet hier') {
                             return;
                         }
+                        if (line.direction === 'Betriebsfahrt') {
+                            return;
+                        }
                         var departureTime = line.departureTime;
                         delete line.departureTime;
                         line = new VVSTimetableEntry(line);
