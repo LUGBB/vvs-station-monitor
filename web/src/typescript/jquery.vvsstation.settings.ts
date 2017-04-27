@@ -56,7 +56,7 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
      * Ajax handling url
      * @type {string}
      */
-    requestUrl: string = 'vvs.php';
+    requestUrl: string = 'https://efa-api.asw.io/api/v1/station/{station}/departures/';
 
     /**
      * Translation array

@@ -461,18 +461,17 @@ class VVSTimetableEntry {
 'use strict';
 class VVS {
     constructor(station, options) {
-        this.requestUrl = 'vvs.php';
+        this.requestUrl = 'https://efa-api.asw.io/api/v1/station/{station}/departures/';
         this.station = station;
         this.configuration = $.extend(new VVSDefaultSettings(), options);
         if (!window.Promise) {
             throw new Error('Promises not available, please update browsers');
         }
     }
-    request(data) {
+    request(station) {
         return $.ajax({
-            url: this.requestUrl,
-            dataType: "json",
-            data: data
+            url: this.requestUrl.replace(/{station}/, String(station)),
+            dataType: "json"
         });
     }
     requestStationDepartures() {
@@ -480,10 +479,7 @@ class VVS {
         if (VVS.stationRequestQueue[station]) {
             return VVS.stationRequestQueue[station];
         }
-        var request = this.request({
-            type: "departures",
-            station: station
-        });
+        var request = this.request(station);
         let promise = new Promise((resolve, reject) => {
             request.done((data) => {
                 resolve(data);
@@ -766,7 +762,7 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
         this.intelligentTimeThreshold = 60;
         this.loadingIndicator = '<div class="loader"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="10" stroke-miterlimit="10"/></svg></div>';
         this.departureType = 'relative';
-        this.requestUrl = 'vvs.php';
+        this.requestUrl = 'https://efa-api.asw.io/api/v1/station/{station}/departures/';
         this.translations = {
             noData: 'Keine Abfahrtszeiten vorhanden',
             minute: 'min',

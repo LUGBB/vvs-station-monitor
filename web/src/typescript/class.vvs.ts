@@ -4,7 +4,7 @@
 'use strict';
 
 class VVS {
-    requestUrl: string = 'vvs.php';
+    requestUrl: string = 'https://efa-api.asw.io/api/v1/station/{station}/departures/';
 
     // station queue (avoid duplicate requests)
     static stationRequestQueue: any = {};
@@ -28,11 +28,10 @@ class VVS {
      * @param data
      * @returns {JQueryXHR}
      */
-    request(data: any): any {
+    request(station: string|number): any {
         return $.ajax( {
-            url: this.requestUrl,
-            dataType: "json",
-            data: data
+            url: this.requestUrl.replace(/{station}/, String(station)),
+            dataType: "json"
         });
     }
 
@@ -50,10 +49,7 @@ class VVS {
             return VVS.stationRequestQueue[station];
         }
 
-        var request = this.request({
-            type: "departures",
-            station: station
-        });
+        var request = this.request(station);
 
         let promise = new Promise((resolve: any, reject: any) => {
             request.done((data: any) => {
