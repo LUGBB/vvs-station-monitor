@@ -469,25 +469,29 @@ class VVS {
         }
     }
     request(station) {
-        return $.ajax({
-            url: this.requestUrl.replace(/{station}/, String(station)),
-            dataType: "json"
+        let url = this.requestUrl.replace(/{station}/, String(station));
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        let promise = new Promise((resolve, reject) => {
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    resolve(JSON.parse(xhr.responseText));
+                }
+                else {
+                    reject(`${xhr.status}: ${xhr.responseText}`);
+                }
+            };
         });
+        xhr.send();
+        return promise;
     }
     requestStationDepartures() {
         var station = this.station;
         if (VVS.stationRequestQueue[station]) {
             return VVS.stationRequestQueue[station];
         }
-        var request = this.request(station);
-        let promise = new Promise((resolve, reject) => {
-            request.done((data) => {
-                resolve(data);
-            });
-            request.error((jqXHR, textStatus, errorThrown) => {
-                reject(`${textStatus}: ${errorThrown}`);
-            });
-        });
+        var promise = this.request(station);
         promise.then(() => {
             delete VVS.stationRequestQueue[station];
         });

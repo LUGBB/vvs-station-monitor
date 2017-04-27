@@ -25,14 +25,28 @@ class VVS {
     /**
      * Plain ajax request
      *
-     * @param data
+     * @param station
      * @returns {JQueryXHR}
      */
     request(station: string|number): any {
-        return $.ajax( {
-            url: this.requestUrl.replace(/{station}/, String(station)),
-            dataType: "json"
+        let url = this.requestUrl.replace(/{station}/, String(station));
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        let promise = new Promise((resolve: any, reject: any) => {
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    resolve(JSON.parse(xhr.responseText));
+                } else {
+                    reject(`${xhr.status}: ${xhr.responseText}`);
+                }
+            };
         });
+        xhr.send();
+
+        return promise;
     }
 
     /**
@@ -49,18 +63,7 @@ class VVS {
             return VVS.stationRequestQueue[station];
         }
 
-        var request = this.request(station);
-
-        let promise = new Promise((resolve: any, reject: any) => {
-            request.done((data: any) => {
-                resolve(data);
-            });
-
-            // ajax error
-            request.error((jqXHR: any, textStatus: any, errorThrown: any) => {
-                reject(`${textStatus}: ${errorThrown}`);
-            });
-        });
+        var promise = this.request(station);
 
         // delete queque item on success
         promise.then(() => {
