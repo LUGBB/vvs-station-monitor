@@ -13,6 +13,9 @@ and will display also the delay.
 The station monitor will refresh periodically and can be used for
 infomation monitors.
 
+Docker image: `lugbb/vvs-station-monitor` (based on nginx)
+
+
 ### Examples
 
 - [Stuttgart City](https://stationmonitor.lugbb.org/)
