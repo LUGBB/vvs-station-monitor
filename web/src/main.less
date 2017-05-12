@@ -7,7 +7,6 @@
     max-width: @width;
     width: @width;
     min-width: @width;
-    overflow: hidden;
 }
 
 #clock {
@@ -47,15 +46,19 @@
 .vvs-station {
     min-height: 50px;
     padding: 0;
-    margin-top: 1rem;
+    margin: 0;
     cursor: pointer;
 
     .width();
 
     h3 {
         position: relative;
+        width: 100%;
         font-size: 2.5rem;
-        margin-top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        padding-top: 1rem;
 
         .departure-minimum-desc {
             font-size: 0.9em;
@@ -77,6 +80,9 @@
     ul {
         margin: 0;
         padding: 0;
+        list-style-type:none;
+        .width();
+        overlfow: hidden();
 
         li {
             &:first-child {
@@ -157,6 +163,7 @@
     div.direction {
         display: inline-block;
         .width();
+        ovewrflow: hidden();
         margin-left: 5px;
 
         &::before {
@@ -332,7 +339,7 @@
 
     .marquee {
         display: inline-block;
-        width: 8rem;
+        width: 10rem;
         margin: 0 auto;
         white-space: nowrap;
         overflow: hidden;
@@ -494,4 +501,19 @@
     #clock {
         display: none;
     }
+}
+
+.sticky {
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -o-sticky;
+    position: -ms-sticky;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    z-index: 1;
+    background-color: hsla(0, 100%, 100%, 0.9);
+    padding-bottom: 0.5rem;
 }

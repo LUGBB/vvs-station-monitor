@@ -76,7 +76,7 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
      * @type {string}
      */
     templateMain: string = `
-            <h3>{{title}}<i class="departure-minimum-desc">{{departureTitle}}</i></h3>
+            <div class="sticky"><h3>{{title}}<i class="departure-minimum-desc">{{departureTitle}}</i></h3></div>
             {{&content}}
     `;
 

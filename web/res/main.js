@@ -777,7 +777,7 @@ class VVSStationDefaultSettings extends VVSDefaultSettings {
             departureCanceld: 'Zug fällt aus'
         };
         this.templateMain = `
-            <h3>{{title}}<i class="departure-minimum-desc">{{departureTitle}}</i></h3>
+            <div class="sticky"><h3>{{title}}<i class="departure-minimum-desc">{{departureTitle}}</i></h3></div>
             {{&content}}
     `;
         this.templateTitle = `{{stationName}}`;
