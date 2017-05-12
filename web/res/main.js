@@ -895,7 +895,7 @@ $.fn.vvsStation = function (options) {
                 departure: {
                     relative: () => {
                         if (line.delay === 9999 || line.delay === -9999) {
-                            return `<span class="marquee"><span>${settings.translations.departureCanceld} - ${line.departureTime} - ${settings.translations.departureCanceld}</span></span>`;
+                            return `<span class="marquee"><span>${settings.translations.departureCanceld} &mdash; ${line.departureTime} &mdash; ${settings.translations.departureCanceld}</span></span>`;
                         }
                         if (settings.departureType === 'intelligent' && line.departure >= settings.intelligentTimeThreshold) {
                             return line.departureTime;
