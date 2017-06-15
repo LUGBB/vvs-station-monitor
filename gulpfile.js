@@ -6,6 +6,7 @@ var autoprefix = require('gulp-autoprefixer');
 var minifyCSS = require('gulp-minify-css');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
+var webserver = require('gulp-webserver');
 
 gulp.task('scripts', function () {
     var tsProject = ts.createProject('tsconfig.json');
@@ -33,4 +34,16 @@ gulp.task('watcher', function () {
 });
 
 gulp.task('watch', ['css', 'scripts', 'watcher']);
+gulp.task('server', ['css', 'scripts', 'watcher'], function() {
+    gulp.src('./web')
+    .pipe(webserver({
+        livereload: true,
+        directoryListing: {
+            enable:true,
+            path: 'web'
+        },
+        open: true,
+    }));
+});
+
 gulp.task('default', ['css', 'scripts']);

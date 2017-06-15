@@ -17,6 +17,7 @@
     "@types/jquery": "^2.0.33",
     "@types/mustache": "^0.8.29",
     "gulp-sourcemaps": "^2.2.0",
-    "gulp-uglify": "^2.0.0"
+    "gulp-uglify": "^2.0.0",
+    "gulp-webserver": "^0.9.0"
   }
 }
