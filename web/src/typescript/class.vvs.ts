@@ -34,6 +34,7 @@ class VVS {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.timeout = this.configuration.timeout;
 
         let promise = new Promise((resolve: any, reject: any) => {
             xhr.onload = () => {
@@ -43,6 +44,14 @@ class VVS {
                     reject(`${xhr.status}: ${xhr.responseText}`);
                 }
             };
+
+            xhr.onerror = () => {
+                reject(`request failed`);
+            };
+
+            xhr.ontimeout = () => {
+                reject(`request timed out`);
+            }
         });
         xhr.send();
 

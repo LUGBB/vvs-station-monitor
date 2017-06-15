@@ -368,7 +368,7 @@
         return token[1];
     };
     mustache.name = 'mustache.js';
-    mustache.version = '2.2.1';
+    mustache.version = '2.3.0';
     mustache.tags = ['{{', '}}'];
     var defaultWriter = new Writer();
     mustache.clearCache = function clearCache() {
@@ -398,8 +398,8 @@
     mustache.Scanner = Scanner;
     mustache.Context = Context;
     mustache.Writer = Writer;
+    return mustache;
 }));
-0;
 class Utility {
     static strPadLeft(nr, n, str) {
         return Array(n - String(nr).length + 1).join(str || '0') + nr;
@@ -446,6 +446,7 @@ class VVSDefaultSettings {
         this.blacklistLine = false;
         this.whitelistLine = false;
         this.delayClasses = [];
+        this.timeout = 10000;
     }
 }
 'use strict';
@@ -473,6 +474,7 @@ class VVS {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.timeout = this.configuration.timeout;
         let promise = new Promise((resolve, reject) => {
             xhr.onload = () => {
                 if (xhr.status === 200) {
@@ -481,6 +483,12 @@ class VVS {
                 else {
                     reject(`${xhr.status}: ${xhr.responseText}`);
                 }
+            };
+            xhr.onerror = () => {
+                reject(`request failed`);
+            };
+            xhr.ontimeout = () => {
+                reject(`request timed out`);
             };
         });
         xhr.send();

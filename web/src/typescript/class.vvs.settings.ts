@@ -48,4 +48,10 @@ class VVSDefaultSettings {
      * @type {Array}
      */
     delayClasses: Array<any> = [];
+
+    /**
+     * Timeout in ms
+     * @type {number}
+     */
+    timeout: number = 10000;
 }
