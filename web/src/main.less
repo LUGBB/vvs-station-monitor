@@ -1,3 +1,12 @@
+@bgColorUbahn: #2789c4;
+@bgColorSbahn: #288d20;
+@bgColorRegio: #707273;
+@bgColorBus: #da0003;
+@bgColorTrain: #FFF;
+@bgColorExceptional: darken(#ffa700, 10%);
+
+@stripesWidthExceptional: 0.8rem;
+
 .backgroundFadeLeft(@color: white, @width: 1em) {
     padding-left: @width + 0.5em;
     background: linear-gradient(to right, rgba(255,255,255,0), @color @width, @color);
@@ -117,19 +126,49 @@
         // U-Bahn
         &[data-line^=U] {
             color: white;
-            background-color: #2789c4;
+            background-color: @bgColorUbahn;
+
+            &[data-line$=E] {
+                background: repeating-linear-gradient(
+                    -45deg,
+                    @bgColorExceptional,
+                    @bgColorExceptional @stripesWidthExceptional,
+                    @bgColorUbahn @stripesWidthExceptional,
+                    @bgColorUbahn (@stripesWidthExceptional*3)
+                );
+            }
         }
 
         // S-Bahn
         &[data-line^=S] {
             color: white;
-            background-color: #288d20;
+            background-color: @bgColorSbahn;
+
+            &[data-line$=E] {
+                background: repeating-linear-gradient(
+                    -45deg,
+                    @bgColorExceptional,
+                    @bgColorExceptional @stripesWidthExceptional,
+                    @bgColorSbahn @stripesWidthExceptional,
+                    @bgColorSbahn (@stripesWidthExceptional*3)
+                );
+            }
         }
 
         // Regionalbahn (R,RB,RE,RT)
         &[data-line^=R] {
             color: white;
-            background-color: #707273;
+            background-color: @bgColorRegio;
+
+            &[data-line$=E] {
+                background: repeating-linear-gradient(
+                    -45deg,
+                    @bgColorExceptional,
+                    @bgColorExceptional @stripesWidthExceptional,
+                    @bgColorRegio @stripesWidthExceptional,
+                    @bgColorRegio (@stripesWidthExceptional*3)
+                );
+            }
         }
 
         // Bus
@@ -139,18 +178,27 @@
         &[data-line^=E],
         &[data-line^=RT] {
             color: white;
-            background-color: #da0003;
+            background-color: @bgColorBus;
         }
 
         // IC, ICE, IRE
         &[data-line^=IC],
         &[data-line^=IR] {
             color: red;
-            background-color: white;
+            background-color: @bgColorTrain;
             border-color: black;
             font-style: italic;
-        }
 
+            &[data-line$=E] {
+                background: repeating-linear-gradient(
+                    -45deg,
+                    desaturate(@bgColorTrain, 30%),
+                    desaturate(@bgColorTrain, 30%) 1rem,
+                    @bgColorTrain 1rem,
+                    @bgColorTrain 1rem
+                );
+            }
+        }
     }
 
     .time-box {

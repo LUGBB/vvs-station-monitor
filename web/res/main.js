@@ -589,18 +589,10 @@ class VVS {
         return ret;
     }
     transformLineNumberToType(lineNumber) {
-        var ret = "";
+        var ret = lineNumber;
         var match;
         if (!isNaN(Number(lineNumber))) {
-            ret = "B";
-        }
-        else {
-            if (match = lineNumber.match(/^([a-z]+)/i)) {
-                ret = match[0];
-            }
-            else {
-                ret = lineNumber.charAt(0);
-            }
+            ret = "B" + lineNumber;
         }
         return ret;
     }

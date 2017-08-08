@@ -236,19 +236,12 @@ class VVS {
      * @returns {string}
      */
     transformLineNumberToType(lineNumber: string): string {
-        var ret: string = "";
+        var ret: string = lineNumber;
         var match: any;
 
         // check if Bus
         if (!isNaN(Number(lineNumber))) {
-            ret = "B";
-        } else {
-            // check if train or other named vehicle
-           if (match = lineNumber.match(/^([a-z]+)/i)) {
-               ret = match[0];
-           } else {
-               ret = lineNumber.charAt(0);
-           }
+            ret = "B" + lineNumber;
         }
 
         return ret;
