@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!--
+        VVS Station Monitor
+        Github: https://github.com/LUGBB/vvs-station-monitor
+    -->
+
+    <title>VVS Haltestellen-Monitor</title>
+
+    <link rel="apple-touch-icon" href="res/favicon.png">
+    <link rel="icon" type="image/png" href="res/favicon.png">
+    <meta name="msapplication-TileImage" content="res/favicon.png">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="res/main.css">
+    <style type="text/css">
+        body {
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5000055" data-max-departure="400" data-whitelist-line="^U.*$"></div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="vvs-station" data-station="5006073" data-max-departure="400"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+<script src="res/main.js"></script>
+<script>
+    jQuery( document ).ready(function($) {
+        $(".vvs-station").vvsStation({
+            // custom settings here
+            // -> see web/src/typescript/class.vvs.settings.ts
+            // -> see web/src/typescript/jquery.vvsstation.settings.ts
+        });
+
+        // reload every 60 minutes
+        setTimeout(function() {
+            location.reload();
+        }, 60 * 60 * 1000);
+    });
+</script>
+</body>
+</html>
